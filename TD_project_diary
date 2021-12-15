@@ -1,0 +1,180 @@
+-----Tank Destroyer Project Diary
+
+Description: a tank shooting game, basic four shooting directions
+Estimate Time: 30 days
+
+
+Tasks Remains:
+- Laser charging effect
+- Laser delay time
+- Boss laser collision
+- Boss collision
+- Boss bullet collision
+- Set up boss level
+- Set up level
+(- Set up full screen mode)
+
+
+Commit Days:
+
+>>>>> Day 1: 09/11/2021 10:45PM
+Commit time: 30'
+Report:
+- Continue working on particle laser charge effect
+- Create another sample parabola movement code
+	@file projectile_parabola_movement(testing).py
+- Work on the new file from now
+- Create simple straight movement
+- Problem with posUpdate member function which can update obj pos
+- obj pop into the next point but does not move
+- obj shake and still does not move.
+Needs:
+- Make the obj move straight properly
+- Modifying increament to see what if happens
+- Write a pseudocode for parabolic movement
+- Apply Shooting Gravity movement from physics
+
+
+>>>>> Day 2: 09/16/2021 6:58PM
+Commit time: 1h
+Report:
+- Continue working on particle laser charge effect
+- Solved problem posUpdate member
+- Fixed obj not moveing
+- Fixed obj pop into a new location 
+- Modified object movement but have not edit to fit in event
+Needs:
+- Create Pseudocode for parabolic movement
+- Ideas to increament the angles to change curve
+- Angle and direction depend on Cycle of Trigonometry
+- Only Apply gravity motion to the problem
+
+
+>>>>> Day 3: 09/18/2021 4:15PM
+Commit time: 30'
+Report:
+- Continue working on particle laser charge effect
+- Scratch functions to make projectile motion
+- The angle to shoot a projectile must greater than the angle
+made by distance x and distance y between two object
+- The touch-point will be at the highest position according an axis (y)
+that is perpendicular to the other axis(x).
+
+Needs:
+- Continue working on particle laser charge effect
+- Write full code make the prototype works as simple project tile motion
+- Come up with the approach of function to increament the position
+- May require to solve a equation to get the v0 and theta
+- theta can be the double of distance angle
+- v0 is immutable
+
+
+>>>>> Day 4: 09/19/2021 3:35PM
+Commit time: 50'
+Report:
+- Continue working on particle laser charge effect
+- Rewrite the code to review pygame structure
+- Calculating the plan for updating position for object
+
+Needs:
+- Set up equationb to findout the velocity for motion
+- Find the position equation to put in the code in the position update function
+- Find the double distance angle for the motion
+
+
+>>>>> Day 5: 09/20/2021 8:30PM
+Commit time: (Did not recorded) 
+Report:
+- Continue working on particle laser charge effect
+- Explored 1/4 elipse curve would fit the motion
+- Tim's method is the current optimum way to solve but it cheats number
+- Trasnfer redDraw function's components to the main function 
+- Added a ball object for testing
+
+Needs:
+- Continue working on particle laser charge effect
+- Focus on Time's method to find out the solution
+- Create usable function for the prototype
+- Add multiple objects with the same vertical pos
+
+
+>>>>> Day 6: 10/02/2021
+Commit Time: 50'
+Report:
+- Continue working on particle laser charge effect
+- Implemented function postUpdate
+- Implemented Reset position
+- Implemented Motion trigger in main loop
+- Type Error occured: "unsupported operand type(s) for -: 'float' and 'method'"
+
+Needs:
+- Fix the error
+
+
+>>>>> Day 7: 10/04/2021
+Commit Time: 2h
+Report:
+- Continue working on particle laser charge effect
+- Edit function postUpdate
+- Fix no moving error by relocate the position condition after the mouse event
+- Two obj ball1 & 2 have a bouncing feature
+- Two obj do not stop when they are equal or exceed target.y
+- Two obj move parallelly
+- Only obj 2 contact with target ball
+
+Needs:
+- Edit the feature to stop the obj
+- Modify obj1 to let it move toward the target ball not paralelly
+- Add function to get center and recalculate the elipse elements
+
+
+>>>>> Day 8: 10/8/2021
+Commit Time: 45'
+Report:
+- Modified obj1 to let it reach the target ball
+- Update mechanics that allows any balls reach target
+- Include the circle case in which verDist == horDist
+- Added more speed to allows ball move faster
+
+Needs:
+- Create a function that calculates original distance 
+- Create a function that calculates center of elipse
+- Those function can be members functions or non
+- Create a function spawn many balls in the same x-axis
+
+
+>>>>> Day 9: 10/9/2021
+Commit Time = 25'
+Report:
+- Created reset position function
+- Created distance estimator function
+- Created two more non-test case, horzontal+vertical line
+with the target ball
+
+Needs:
+- Set up condition for horizontal+vertical line with target
+- Create a spawn functions that test many case on the same alignment
+- Set up other directions
+	+ set a rectangle for the motion so then rotate it
+	+ set up each condition for each directions 
+
+
+>>>>> Day 10: 10/10/2021
+Commit Time: 50'
+Report:
+- Added condition horizontal+vertical line with target
+
+Needs:
+- Create a function that check condition to allow obj move
+- Let objs reset their position in individual time under their own condition
+- Create another prototype that spawn and move at the same line with upward direction
+
+>>>>> Day 11: 10/17/2021
+Commit Time: None
+Report:
+- Copy file parabola_motion.py
+- Rename the copy file to parabola_motion_random1D.py
+
+Needs:
+- Edit posUpdate function that can work with random position
+- Create a spawn function.

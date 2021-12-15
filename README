@@ -1,0 +1,12 @@
+
+Name: Tank Destroyers
+Author: Minh Ngo
+
+This is a tank shooting game base on a childhood memory. 
+The game is over when player complete level 5
+
+The folder named "part_sample" contain all prototypes of components in the game.
+
+The folder named "Without Sprites" contain all components of original game without using Sprites to render images.
+
+Have fun :)

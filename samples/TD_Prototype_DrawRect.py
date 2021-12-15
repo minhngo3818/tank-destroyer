@@ -8,16 +8,22 @@ class Tank(Sprite):
     def __init__(self, x, y):
         super(Tank, self).__init__()
         # Load image
-        self.Player = {"left": [pygame.image.load("Pics/tank_left(1).png"), pygame.image.load("Pics/tank_left(2).png"),
-                                pygame.image.load("Pics/tank_left(3).png"), pygame.image.load("Pics/tank_left(4).png")],
-                       "right": [pygame.image.load("Pics/tank_right(1).png"),
-                                 pygame.image.load("Pics/tank_right(2).png"),
-                                 pygame.image.load("Pics/tank_right(3).png"),
-                                 pygame.image.load("Pics/tank_right(4).png")],
-                       "up": [pygame.image.load("Pics/tank_up(1).png"), pygame.image.load("Pics/tank_up(2).png"),
-                              pygame.image.load("Pics/tank_up(3).png"), pygame.image.load("Pics/tank_up(4).png")],
-                       "down": [pygame.image.load("Pics/tank_down(1).png"), pygame.image.load("Pics/tank_down(2).png"),
-                                pygame.image.load("Pics/tank_down(3).png"), pygame.image.load("Pics/tank_down(4).png")]}
+        self.Player = {"left": [pygame.image.load("images/tank_left(1).png"),
+                                pygame.image.load("images/tank_left(2).png"),
+                                pygame.image.load("images/tank_left(3).png"),
+                                pygame.image.load("images/tank_left(4).png")],
+                       "right": [pygame.image.load("images/tank_right(1).png"),
+                                 pygame.image.load("images/tank_right(2).png"),
+                                 pygame.image.load("images/tank_right(3).png"),
+                                 pygame.image.load("images/tank_right(4).png")],
+                       "up": [pygame.image.load("images/tank_up(1).png"),
+                              pygame.image.load("images/tank_up(2).png"),
+                              pygame.image.load("images/tank_up(3).png"),
+                              pygame.image.load("images/tank_up(4).png")],
+                       "down": [pygame.image.load("images/tank_down(1).png"),
+                                pygame.image.load("images/tank_down(2).png"),
+                                pygame.image.load("images/tank_down(3).png"),
+                                pygame.image.load("images/tank_down(4).png")]}
 
         # x y coordinator
         self.x = x
@@ -81,10 +87,10 @@ class Tank(Sprite):
 class Projectile(Sprite):
     def __init__(self, pos_x, pos_y, direction):
         super().__init__()
-        self.Bullet = {"left": pygame.image.load("Pics/bullet_left.png"),
-                       "right": pygame.image.load("Pics/bullet_right.png"),
-                       "up": pygame.image.load("Pics/bullet_up.png"),
-                       "down": pygame.image.load("Pics/bullet_down.png")}
+        self.Bullet = {"left": pygame.image.load("images/bullet_left.png"),
+                       "right": pygame.image.load("images/bullet_right.png"),
+                       "up": pygame.image.load("images/bullet_up.png"),
+                       "down": pygame.image.load("images/bullet_down.png")}
         self.direction = direction
         self.image = self.Bullet[self.direction]
         self.rect = self.image.get_rect()
@@ -114,7 +120,7 @@ win_width = 800  # change the screen dimension bigger
 win_height = 600
 win = pygame.display.set_mode((win_width, win_height))
 pygame.display.set_caption('Tank Destroyer')
-bg = pygame.image.load('Pics/tank_field.png').convert()
+bg = pygame.image.load('images/tank_field.png').convert()
 
 """Gameplay"""
 FPS = 60
@@ -202,8 +208,8 @@ if __name__ == '__main__':
 #   Task 3: movement - checked
 
 # 2: Bullet class - 20hrs
-#   Task 1: Create Bullets Pics
-#   Task 2: Create Bullet Pics for enemies
+#   Task 1: Create Bullets images
+#   Task 2: Create Bullet images for enemies
 #           4 type
 #   Task 3: Bullet in 1 direction
 #   Task 4: Bullet in 4 direction

@@ -1,13 +1,12 @@
 import sys
-import pygame, random
+import pygame
 
 from settings import Settings
 from menu import Menu
-from interface import Interface
+from src.interface import Interface
 from player import Player
-from enemy import Boss
 from spawn_enemy import Spawn
-from bullet import Bullet, BossBullet, Laser, LaserCharge
+from src.bullet import Bullet, BossBullet
 from stats import Stats
 from sounds import Sounds
 
@@ -21,7 +20,7 @@ class Tank_Destroyer:
 
         #   Initialize Foundation
         self.setting = Settings()
-        self.bg = pygame.image.load("Pics/tank_field.png")
+        self.bg = pygame.image.load("images/tank_field.png")
         self.width = self.setting.scr_width
         self.height = self.setting.scr_height
         self.screen = pygame.display.set_mode((self.width, self.height))

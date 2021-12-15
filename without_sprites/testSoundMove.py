@@ -6,10 +6,10 @@ pygame.init()
 w, h = 800, 600
 screen = pygame.display.set_mode((w, h))
 
-move_sound = mixer.Sound("../Sounds/Effects/TankMoving.wav")
+move_sound = mixer.Sound("../sounds/Effects/TankMoving.wav")
 move_sound.set_volume(0.4)
-track1 = mixer.Sound("Sounds/Theme/Battle_IronMan.wav")
-track2 = mixer.Sound("Sounds/Theme/Boss_ThunderHorse.wav")
+track1 = mixer.Sound("sounds/Theme/Battle_IronMan.wav")
+track2 = mixer.Sound("sounds/Theme/Boss_ThunderHorse.wav")
 channel1 = mixer.Channel(1)
 channel2 = mixer.Channel(2)
 channel3 = mixer.Channel(3)

@@ -16,7 +16,7 @@ class Menu(Sprite):
         self.screen_rect = self.access.screen_rect
 
         #   Load introMenu BackGround
-        self.bg_menu = pygame.image.load('Pics/bg_introMenu.jpg')  # Ratio: 16/9
+        self.bg_menu = pygame.image.load('images/bg_introMenu.jpg')  # Ratio: 16/9
         self.bg_size = self.bg_menu.get_size()
         self.bg_menu = pygame.transform.scale(self.bg_menu, (1120, 630))
 

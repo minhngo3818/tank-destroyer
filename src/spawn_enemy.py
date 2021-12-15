@@ -1,8 +1,8 @@
 import pygame
 from pygame.sprite import Sprite
 
-from enemy import Enemy
-from enemy import Boss
+from src.enemy import Enemy
+from src.enemy import Boss
 
 
 class Spawn(Sprite):

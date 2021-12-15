@@ -3,7 +3,7 @@ import sys
 import pygame
 from Norm.norm_tank_player import Player
 
-background = ".\\P1_TankDestroyers\\Pics\\tank_field.png"
+background = ".\\P1_TankDestroyers\\images\\tank_field.png"
 bg = pygame.image.load(background)
 win = pygame.display.set_mode((1200, 700))
 pygame.display.set_caption("Tank Destroyer")

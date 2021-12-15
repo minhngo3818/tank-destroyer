@@ -4,7 +4,7 @@ from pygame import mixer
 mixer.init() 
   
 # Loading the song 
-mixer.music.load("C:/Users/tuyen/OneDrive/Desktop/1-TankDestroyers/Sounds/Theme/Boss_Thunderhorse.mp3") 
+mixer.music.load("C:/Users/tuyen/OneDrive/Desktop/1-TankDestroyers/sounds/Theme/Boss_Thunderhorse.mp3")
   
 # Setting the volume 
 mixer.music.set_volume(0.7) 

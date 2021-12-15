@@ -14,10 +14,10 @@ class Enemy(Sprite):
         self.sounds = Sounds(access)
 
         # Initiation
-        self.image_list = [pygame.image.load("Pics/enemy(1).png"),
-                           pygame.image.load("Pics/enemy(2).png"),
-                           pygame.image.load("Pics/enemy(3).png"),
-                           pygame.image.load("Pics/enemy(4).png")]
+        self.image_list = [pygame.image.load("images/enemy(1).png"),
+                           pygame.image.load("images/enemy(2).png"),
+                           pygame.image.load("images/enemy(3).png"),
+                           pygame.image.load("images/enemy(4).png")]
         self.index = 0
         self.angle = 0
         self.image = self.image_list[self.index].convert()
@@ -132,10 +132,10 @@ class Boss(Sprite):
         self.screen = access.screen
         self.screen_rect = self.screen.get_rect()
 
-        self.image_list = [pygame.image.load("Pics/Boss_Move_1.png"),
-                           pygame.image.load("Pics/Boss_Move_2.png"),
-                           pygame.image.load("Pics/Boss_Move_3.png"),
-                           pygame.image.load("Pics/Boss_Move_4.png")]
+        self.image_list = [pygame.image.load("images/Boss_Move_1.png"),
+                           pygame.image.load("images/Boss_Move_2.png"),
+                           pygame.image.load("images/Boss_Move_3.png"),
+                           pygame.image.load("images/Boss_Move_4.png")]
         self.index = 0
         self.angel = 180
         self.image = self.image_list[self.index].convert()

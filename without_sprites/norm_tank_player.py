@@ -8,10 +8,10 @@ class Player:
         self.speed = 2
 
         # Movement Set
-        self.imgleft = pygame.image.load('Pics/tank_left_1.png')
-        self.imgright = pygame.image.load('Pics/tank_right_1.png')
-        self.imgup = pygame.image.load('Pics/tank_up_1.png')
-        self.imgdown = pygame.image.load('Pics/tank_down_1.png')
+        self.imgleft = pygame.image.load('images/tank_left_1.png')
+        self.imgright = pygame.image.load('images/tank_right_1.png')
+        self.imgup = pygame.image.load('images/tank_up_1.png')
+        self.imgdown = pygame.image.load('images/tank_down_1.png')
         self.rect = self.imgup.get_rect()
 
         # Flag

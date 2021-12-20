@@ -178,3 +178,12 @@ Report:
 Needs:
 - Edit posUpdate function that can work with random position
 - Create a spawn function.
+>>>>> Day 12: 12/20/2021
+Commit Time: None
+Need:
+- Edit postUpdate function that can work with random position (Prototype)
+- Create spawn function (Prototype)
+- Complete functionality of boss's guns
+- Generalize player-projectile collision, same enemy-enemy, projectile-projectile
+- Debug boss class to make it inherit enemy class
+- override functions in Boss class

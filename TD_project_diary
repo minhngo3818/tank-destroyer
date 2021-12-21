@@ -178,6 +178,8 @@ Report:
 Needs:
 - Edit posUpdate function that can work with random position
 - Create a spawn function.
+
+
 >>>>> Day 12: 12/20/2021
 Commit Time: None
 Need:
@@ -187,3 +189,19 @@ Need:
 - Generalize player-projectile collision, same enemy-enemy, projectile-projectile
 - Debug boss class to make it inherit enemy class
 - override functions in Boss class
+
+
+>>>>> Day 13: 12/20/2021
+Commit Time: 40'
+Report:
+- change function name: class Ball() -> ParaBall(), drawCircle() -> draw_circle(),
+    posUpdate() -> pos_update(), resetPosition() -> reset_position(),
+- Create spawn_circles()->completed, ellipse_move()->ongoing, draw_circles()->completed
+
+Needs:
+- complete functions ellipse_move()
+- consider add member variables vertical_distance,
+    horizontal_distance, center_x, center_y to ParaBall()
+- embed estDistance() implementation to the new function
+- consider to use a list contain a list or a child class to contain those variables
+- On hold full directions charging effect of firing laser

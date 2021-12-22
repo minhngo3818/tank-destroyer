@@ -26,7 +26,7 @@ scr_width = 800
 ACCELERATION = 3.5
 
 
-class ParaBall:
+class Ball:
 	def __init__(self, x, y, radius, color):
 		self.x = x
 		self.y = y
@@ -39,6 +39,11 @@ class ParaBall:
 		self.x = self.resetX
 		self.y = self.resetY
 
+	def draw_circle(self, win):
+		pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
+
+
+"""	
 	def pos_update(self, speed, verDist, horDist, centerX, centerY):
 		
 		if verDist != 0 and horDist != 0:
@@ -53,13 +58,33 @@ class ParaBall:
 			self.y -= speed
 		elif horDist != 0 and verDist == 0:
 			self.x += speed
-
-	def draw_circle(self, win):
-		pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
+"""
 
 
-def estDistance(pos1, pos2):
-	return abs(pos1 - pos2)
+class ParaBall(Ball):
+
+	def __init__(self, x, y, radius, color, target_circle):
+		Ball.__init__(self, x, y, radius, color)
+		self.target_circle = target_circle
+		self.center_x = self.target_circle.x
+		self.center_y = self.y
+		self.horiz_dist = abs(self.x - self.target_circle.x)
+		self.vrt_dist = abs(self.y - self.target_circle.y)
+		self.speed = 2
+
+	def pos_update(self):
+		if self.vrt_dist != 0 and self.horiz_dist != 0:
+			self.x += self.speed
+			if self.vrt_dist < self.horiz_dist:		# 	b < a in elipse equation
+				self.y = self.center_y - self.vrt_dist * math.sqrt(abs(1 - ((self.x - self.center_x)**2 / self.horiz_dist**2)))
+			elif self.horiz_dist < self.vrt_dist: 						# 	a < b and include cirle case
+				self.y = self.center_y - self.horiz_dist * math.sqrt(abs(1 - ((self.x - self.center_x)**2 / self.vrt_dist**2)))
+
+		# Same x/y position with target
+		elif self.vrt_dist != 0 and self.horiz_dist == 0:
+			self.y -= self.speed
+		elif self.horiz_dist != 0 and self.vrt_dist == 0:
+			self.x += self.speed
 
 
 # Function spawn_balls()
@@ -67,35 +92,33 @@ def estDistance(pos1, pos2):
 # Parameters: a tuple of position x range,
 # 	position y, number of balls, color
 # Return: a list of circles
-def spawn_circles(range_x, pos_y, num_of_ball, color):
+def spawn_circles(range_x, pos_y, num_of_ball, color, target):
 	circle_list = []
-	for _ in num_of_ball:
+	for i in range(num_of_ball):
 		circle_list.append(ParaBall(random.randrange(
-			range_x[0], range_x[1]), pos_y, 10, color))
+			range_x[0], range_x[1]), pos_y, 10, color, target))
 	return circle_list
-	pass
 
 
 # Function ellipse_move()
 # Check and update position of circles in parabolic movement
 # Parameters: a list of circles, a circle target object
 # Return: a boolean of movement
-def ellipse_move(circle_list, target):
-	move = True
+def ellipse_move(circle_list):
 	for circle in circle_list:
-		if circle.x <= target.x:
-			circle.pos_update()
-		else:
+		circle.pos_update()
+
+
+def check_limit(circle_list):
+	for circle in circle_list:
+		if circle.x >= circle.target_circle.x:
 			circle.reset_position()
-	return move
-	pass
 
 
 # Function draw_circles
 def draw_circles(circle_list, win):
 	for circle in circle_list:
 		circle.draw_circle(win)
-	pass
 
 
 # Main function
@@ -110,63 +133,29 @@ def main():
 	clock = pygame.time.Clock()
 	fps = 60
 
-	ball1 = ParaBall(100, 400, 10, (255, 0, 255))			# magneta ball
-	ball2 = ParaBall(200, 400, 10, (255, 255, 0))			# yellow ball
-	ball3 = ParaBall(500, 400, 10, (0, 100, 255))			# blue ball
-	ball4 = ParaBall(200, 100, 10, (255, 100, 100))			# Orange
-	target = ParaBall(500, 100, 10, (0, 255,255))
-	
-	# Calculate distance between balls and target ball
-	verDist1 = estDistance(ball1.y, target.y)
-	horDist1 = estDistance(ball1.x, target.x)
-
-	verDist2 = estDistance(ball2.y, target.y)
-	horDist2 = estDistance(ball2.x, target.x)
-
-	verDist3 = estDistance(ball3.y, target.y)   # On vertical line with target
-	horDist3 = estDistance(ball3.x, target.x)  
-
-	verDist4 = estDistance(ball4.y, target.y)   # On horizontal line with target
-	horDist4 = estDistance(ball4.x, target.x)
-
-	# Find center of Ellipse
-	centerX = target.x
-	centerY = ball1.y
+	# Initialize list of ball
+	target = Ball(500, 100, 10, (0, 255, 255))
+	circle_list = spawn_circles((400, 500), 300, 5, (250, 0, 255), target)
 
 	# Initialize stats
-	run = True          # A boolean to run loop
-	speed = 5
-	angle = 0
+	run = True
 	move = False
 
 	while run:
 		for event in pygame.event.get():
-			if event.type == pygame.QUIT :
+			if event.type == pygame.QUIT:
 				run = False
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				move = True
 
 		if move:
-			if ball1.x <= target.x or ball2.x <= target.x:
-				ball1.pos_update(speed, verDist1, horDist1, centerX, centerY)
-				ball2.pos_update(speed, verDist2, horDist2, centerX, centerY)
-				ball3.pos_update(speed, verDist3, horDist3, centerX, centerY)
-				ball4.pos_update(speed, verDist4, horDist4, centerX, centerY)
-			else:
-				ball1.reset_position()
-				ball2.reset_position()
-				ball3.reset_position()
-				ball4.reset_position()
-				move = False		
+			ellipse_move(circle_list)
+			check_limit(circle_list)
 
 		win.fill((0,0,0))
-
-		ball1.draw_circle(win)
-		ball2.draw_circle(win)
-		ball3.draw_circle(win)
-		ball4.draw_circle(win)
 		target.draw_circle(win)
+		draw_circles(circle_list, win)
 		clock.tick(fps)
 		pygame.display.flip()
 

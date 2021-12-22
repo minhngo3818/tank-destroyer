@@ -205,3 +205,21 @@ Needs:
 - embed estDistance() implementation to the new function
 - consider to use a list contain a list or a child class to contain those variables
 - On hold full directions charging effect of firing laser
+
+>>>> Day 14: 12/21/2021
+Commit Time: 1h 40'
+Report:
+- circles does not switch the condition to narrow or wide parabolic movement in pos_update
+- circles on the same line with target won't move straight
+
+Needs:
+- fix the non switch parabolic movement: pos_update(), class ParaBall(),
+spawn_circles(), ellipse_move(), check_limit()
+
+>>>> Day 15: 12/22/2021
+Commit Time: 1h
+Report:
+- Replace super().__init__(arguments) with Ball.__init__(self, arguments) fix wrong update
+- Function pos_update() doesn't work in the case of obj very closed to target horizontally
+
+Needs:

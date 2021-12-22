@@ -81,8 +81,8 @@ def main():
 	fps = 60
 
 	ball1 = Ball(100, 400, 10, (255, 0, 255))			# magneta ball
-	ball2 = Ball(200, 400, 10, (255, 255, 0))			# yellow ball
-	ball3 = Ball(500, 400, 10, (0, 100, 255))			# blue ball
+	ball2 = Ball(400, 400, 10, (255, 255, 0))			# yellow ball
+	ball3 = Ball(450, 400, 10, (0, 100, 255))			# blue ball
 	ball4 = Ball(200, 100, 10, (255, 100, 100))			# Orange
 	target = Ball(500, 100, 10, (0, 255,255))
 	

@@ -56,8 +56,8 @@ class Tank_Destroyer:
             pygame.time.wait(self.setting.delayTime)
             self.stats.reset_life()
 
-            if self.player.life < 0:
-                self.setting.gameover_on = True
+        if self.player.life < 0:
+            self.setting.gameover_on = True
 
     def check_collision(self):
         self.collision_tolerance = 10 # The area triggers collisions

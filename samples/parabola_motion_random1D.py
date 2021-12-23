@@ -73,13 +73,9 @@ class ParaBall(Ball):
 		self.speed = 2
 
 	def pos_update(self):
-		if self.vrt_dist != 0 and self.horiz_dist != 0:
+		if self.vrt_dist > 0 and self.horiz_dist > 0:
 			self.x += self.speed
-			if self.vrt_dist < self.horiz_dist:		# 	b < a in elipse equation
-				self.y = self.center_y - self.vrt_dist * math.sqrt(abs(1 - ((self.x - self.center_x)**2 / self.horiz_dist**2)))
-			elif self.horiz_dist < self.vrt_dist: 						# 	a < b and include cirle case
-				self.y = self.center_y - self.horiz_dist * math.sqrt(abs(1 - ((self.x - self.center_x)**2 / self.vrt_dist**2)))
-
+			self.y = self.center_y - self.vrt_dist * math.sqrt(abs(1 - ((self.x - self.center_x)/ self.horiz_dist)**2))
 		# Same x/y position with target
 		elif self.vrt_dist != 0 and self.horiz_dist == 0:
 			self.y -= self.speed
@@ -135,7 +131,7 @@ def main():
 
 	# Initialize list of ball
 	target = Ball(500, 100, 10, (0, 255, 255))
-	circle_list = spawn_circles((400, 500), 300, 5, (250, 0, 255), target)
+	circle_list = spawn_circles((200, 500), 300, 25, (250, 0, 255), target)
 
 	# Initialize stats
 	run = True

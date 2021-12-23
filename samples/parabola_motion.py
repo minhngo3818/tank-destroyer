@@ -47,16 +47,16 @@ class Ball:
 		
 		if verDist != 0 and horDist != 0:
 			self.x += time
-			if 0 < verDist <= horDist:		# 	b < a in elipse equation
-				self.y = centerY - verDist * math.sqrt(abs(1 - ((self.x - centerX)**2 / horDist**2)))
-			elif 0 < horDist < verDist: 						# 	a < b and include cirle case
-				self.y = centerY - horDist * math.sqrt(abs(1 - ((self.x - centerX)**2 / verDist**2)))
+			#if 0 < verDist <= horDist:		# 	b < a in elipse equation
+			self.y = centerY - verDist * math.sqrt(abs(1 - ((self.x - centerX)**2 / horDist**2)))
+			#elif 0 < horDist < verDist: 						# 	a < b and include cirle case
+				#self.y = centerY - horDist * math.sqrt(abs(1 - ((self.x - centerX) / verDist)**2))
 
 		# Same x/y position with target
-		elif verDist != 0 and horDist == 0:
-			self.y -= time
-		elif horDist != 0 and verDist == 0:
-			self.x += time
+		#elif verDist != 0 and horDist == 0:
+		#	self.y -= time
+		#elif horDist != 0 and verDist == 0:
+		#	self.x += time
 
 
 	def drawCircle(self, win):
@@ -81,8 +81,8 @@ def main():
 	fps = 60
 
 	ball1 = Ball(100, 400, 10, (255, 0, 255))			# magneta ball
-	ball2 = Ball(400, 400, 10, (255, 255, 0))			# yellow ball
-	ball3 = Ball(450, 400, 10, (0, 100, 255))			# blue ball
+	ball2 = Ball(300, 400, 10, (255, 255, 0))			# yellow ball
+	ball3 = Ball(350, 400, 10, (0, 100, 255))			# blue ball
 	ball4 = Ball(200, 100, 10, (255, 100, 100))			# Orange
 	target = Ball(500, 100, 10, (0, 255,255))
 	

@@ -217,9 +217,15 @@ Needs:
 spawn_circles(), ellipse_move(), check_limit()
 
 >>>> Day 15: 12/22/2021
-Commit Time: 1h
+Commit Time: 2h
 Report:
 - Replace super().__init__(arguments) with Ball.__init__(self, arguments) fix wrong update
 - Function pos_update() doesn't work in the case of obj very closed to target horizontally
+    --> fixed
+- Outside balls move very slow
+- vrt_dist very close to target does not move but only happen flashing two balls
 
 Needs:
+- Increase outside balls speed, vrt_dist > 100
+- Edit very close balls move linearly vrt_dist < 10
+- Change background battle field in the project

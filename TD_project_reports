@@ -229,3 +229,21 @@ Needs:
 - Increase outside balls speed, vrt_dist > 100
 - Edit very close balls move linearly vrt_dist < 10
 - Change background battle field in the project
+
+>>>>> Day 16: 12/23/2021
+Commit Time: 2h 40'
+Report:
+- Add new tank_field
+- Expand range of balls to the right --> no motion
+   --> Error found at check_limit() which reset position for
+       every ball that exceed x-position
+- Using sprite --> use pygame.sprite.collide_rect(obj1, obj2) --> worked
+- Set up reset indicator by using pygame.sprite.collide_rect(obj1, obj2)
+- Speed of balls are not the same if the horiz_dist is different
+
+Needs:
+- Balance the speed of balls depending on horiz_dist (0,10), (10, 100), (n, border)
+- Setup mutable factor depend on horiz_dist to adjust the speed
+- Add all directions
+
+

@@ -12,6 +12,7 @@ Spawn random area is the rectangle area below the target point.
 """
 
 import pygame
+from pygame.sprite import Sprite
 import math
 import random
 
@@ -26,39 +27,24 @@ scr_width = 800
 ACCELERATION = 3.5
 
 
-class Ball:
+class Ball(Sprite):
 	def __init__(self, x, y, radius, color):
-		self.x = x
-		self.y = y
+		Sprite.__init__(self)
+		self.surface = pygame.Surface((radius * 2, radius * 2))
+		self.rect = self.surface.get_rect()
+		self.rect.x = x
+		self.rect.y = y
 		self.resetX = x
 		self.resetY = y
 		self.radius = radius
 		self.color = color
 
 	def reset_position(self):
-		self.x = self.resetX
-		self.y = self.resetY
+		self.rect.x = self.resetX
+		self.rect.y = self.resetY
 
 	def draw_circle(self, win):
-		pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
-
-
-"""	
-	def pos_update(self, speed, verDist, horDist, centerX, centerY):
-		
-		if verDist != 0 and horDist != 0:
-			self.x += speed
-			if 0 < verDist <= horDist:		# 	b < a in elipse equation
-				self.y = centerY - verDist * math.sqrt(abs(1 - ((self.x - centerX)**2 / horDist**2)))
-			elif 0 < horDist < verDist: 						# 	a < b and include cirle case
-				self.y = centerY - horDist * math.sqrt(abs(1 - ((self.x - centerX)**2 / verDist**2)))
-
-		# Same x/y position with target
-		elif verDist != 0 and horDist == 0:
-			self.y -= speed
-		elif horDist != 0 and verDist == 0:
-			self.x += speed
-"""
+		pygame.draw.circle(win, self.color, (self.rect.x, self.rect.y), self.radius)
 
 
 class ParaBall(Ball):
@@ -66,21 +52,26 @@ class ParaBall(Ball):
 	def __init__(self, x, y, radius, color, target_circle):
 		Ball.__init__(self, x, y, radius, color)
 		self.target_circle = target_circle
-		self.center_x = self.target_circle.x
-		self.center_y = self.y
-		self.horiz_dist = abs(self.x - self.target_circle.x)
-		self.vrt_dist = abs(self.y - self.target_circle.y)
+		self.center_x = self.target_circle.rect.x
+		self.center_y = self.rect.y
+		self.horiz_dist = abs(self.rect.x - self.target_circle.rect.x)
+		self.vrt_dist = abs(self.rect.y - self.target_circle.rect.y)
 		self.speed = 2
 
 	def pos_update(self):
 		if self.vrt_dist > 0 and self.horiz_dist > 0:
-			self.x += self.speed
-			self.y = self.center_y - self.vrt_dist * math.sqrt(abs(1 - ((self.x - self.center_x)/ self.horiz_dist)**2))
+			if self.rect.x < self.center_x:
+				self.rect.x += self.speed
+			else:
+				self.rect.x -= self.speed
+
+			self.rect.y = self.center_y - self.vrt_dist * math.sqrt(abs(1 - ((self.rect.x - self.center_x) / self.horiz_dist)**2))
+
 		# Same x/y position with target
 		elif self.vrt_dist != 0 and self.horiz_dist == 0:
-			self.y -= self.speed
+			self.rect.y -= self.speed
 		elif self.horiz_dist != 0 and self.vrt_dist == 0:
-			self.x += self.speed
+			self.rect.x += self.speed
 
 
 # Function spawn_balls()
@@ -99,7 +90,7 @@ def spawn_circles(range_x, pos_y, num_of_ball, color, target):
 # Function ellipse_move()
 # Check and update position of circles in parabolic movement
 # Parameters: a list of circles, a circle target object
-# Return: a boolean of movement
+# Return: non
 def ellipse_move(circle_list):
 	for circle in circle_list:
 		circle.pos_update()
@@ -107,7 +98,7 @@ def ellipse_move(circle_list):
 
 def check_limit(circle_list):
 	for circle in circle_list:
-		if circle.x >= circle.target_circle.x:
+		if pygame.sprite.collide_rect(circle, circle.target_circle):
 			circle.reset_position()
 
 
@@ -130,8 +121,8 @@ def main():
 	fps = 60
 
 	# Initialize list of ball
-	target = Ball(500, 100, 10, (0, 255, 255))
-	circle_list = spawn_circles((200, 500), 300, 25, (250, 0, 255), target)
+	target = Ball(400, 100, 10, (0, 255, 255))
+	circle_list = spawn_circles((100, 700), 300, 30, (250, 0, 255), target)
 
 	# Initialize stats
 	run = True
@@ -149,7 +140,7 @@ def main():
 			ellipse_move(circle_list)
 			check_limit(circle_list)
 
-		win.fill((0,0,0))
+		win.fill((0, 0, 0))
 		target.draw_circle(win)
 		draw_circles(circle_list, win)
 		clock.tick(fps)

@@ -231,7 +231,7 @@ Needs:
 - Change background battle field in the project
 
 >>>>> Day 16: 12/23/2021
-Commit Time: 2h 40'
+Commit Time: 3h
 Report:
 - Add new tank_field
 - Expand range of balls to the right --> no motion

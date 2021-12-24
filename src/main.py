@@ -20,7 +20,7 @@ class Tank_Destroyer:
 
         #   Initialize Foundation
         self.setting = Settings()
-        self.bg = pygame.image.load("images/tank_field.png")
+        self.bg = pygame.image.load("images/ground_2.png")
         self.width = self.setting.scr_width
         self.height = self.setting.scr_height
         self.screen = pygame.display.set_mode((self.width, self.height))

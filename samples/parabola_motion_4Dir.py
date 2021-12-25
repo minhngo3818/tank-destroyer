@@ -23,10 +23,6 @@ import random
 scr_height = 500
 scr_width = 800
 
-# Motion stats
-ACCELERATION = 3.5
-
-
 class Ball(Sprite):
 	def __init__(self, x, y, radius, color):
 		Sprite.__init__(self)
@@ -56,7 +52,7 @@ class ParaBall(Ball):
 		self.center_y = self.rect.y
 		self.horiz_dist = abs(self.rect.x - self.target_circle.rect.x)
 		self.vrt_dist = abs(self.rect.y - self.target_circle.rect.y)
-		self.speed = 2
+		self.speed = 3
 
 	def pos_update(self):
 		if self.vrt_dist > 0 and self.horiz_dist > 0:
@@ -65,7 +61,8 @@ class ParaBall(Ball):
 			else:
 				self.rect.x -= self.speed
 
-			self.rect.y = self.center_y - self.vrt_dist * math.sqrt(abs(1 - ((self.rect.x - self.center_x) / self.horiz_dist)**2))
+			self.rect.y = self.center_y - self.vrt_dist * math.sqrt(
+				abs(1 - ((self.rect.x - self.center_x) / self.horiz_dist)**2))
 
 		# Same x/y position with target
 		elif self.vrt_dist != 0 and self.horiz_dist == 0:

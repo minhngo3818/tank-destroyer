@@ -1,13 +1,11 @@
 """Projectile Parabolic Motion Testing
 
 @author Minh Ngo
-@date 09/11/2021
-@version 2
-@file projectile_parabola_motion.py
+@date 12/26/2021
+@version 3
+@file parabola_motion_allDir.py
 
-Description: The code will display the parabola motions 
-by randoms points. All objects will gather at target point. 
-Spawn random area is the rectangle area below the target point.
+Description:
 
 """
 import pygame
@@ -43,6 +41,13 @@ class Ball(Sprite):
 		pygame.draw.circle(win, self.color, (self.rect.x, self.rect.y), self.radius)
 
 
+class TargetBall(Ball):
+
+	def __init__(self, x, y, radius, color, direction = 'down'):
+		Ball.__init__(self, x, y, radius, color)
+		self.dir = direction
+
+
 class ParaBall(Ball):
 
 	def __init__(self, x, y, radius, color, target_circle):
@@ -54,6 +59,15 @@ class ParaBall(Ball):
 		self.vrt_dist = abs(self.rect.y - self.target_circle.rect.y)
 		self.speed = 3
 
+	# Helper functions for pos_update()
+	def left_right(self):
+
+		pass
+
+	def up_down(self):
+		pass
+
+	# Position update function
 	def pos_update(self):
 		if self.vrt_dist > 0 and self.horiz_dist > 0:
 			if self.rect.x < self.center_x:
@@ -69,6 +83,9 @@ class ParaBall(Ball):
 			self.rect.y -= self.speed
 		elif self.horiz_dist != 0 and self.vrt_dist == 0:
 			self.rect.x += self.speed
+
+		self.left_right()
+		self.up_down()
 
 
 # Function spawn_balls()
@@ -104,6 +121,8 @@ def draw_circles(circle_list, win):
 	for circle in circle_list:
 		circle.draw_circle(win)
 
+
+# Function
 
 # Main function
 def main():

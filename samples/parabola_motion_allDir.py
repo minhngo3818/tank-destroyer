@@ -44,7 +44,7 @@ class Ball(Sprite):
 class ParaBall(Ball):
 
 	def __init__(self, x, y, radius, color, target_circle):
-		Ball.__init__(self, x, y, radius, color)
+		super().__init__(x, y, radius, color)
 		self.target_circle = target_circle
 		self.center_x = self.target_circle.rect.x
 		self.center_y = self.rect.y
@@ -82,7 +82,7 @@ class ParaBall(Ball):
 		pass
 
 	# Position update function
-	def pos_update(self, direction):
+	def update(self, direction):
 		if self.vrt_dist > 0 and self.horiz_dist > 0:
 			if self.target_circle.direction in ['left', 'right']:
 				self.left_right(direction)
@@ -115,7 +115,7 @@ def spawn_circles(range_x, pos_y, num_of_ball, color, target):
 # Return: non
 def ellipse_move(circle_list, direction):
 	for circle in circle_list:
-		circle.pos_update(direction)
+		circle.update(direction)
 
 
 def check_limit(circle_list):

@@ -146,10 +146,6 @@ chargeGroup = pygame.sprite.Group()
 
 density = 10
 
-
-# Function
-
-# Problem: Initialize random start pos of charge effect
 # Problem: Initialize start pos of Laser depending on Object
 # Problem: Time count set-up, laser trigger.
 

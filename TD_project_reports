@@ -246,11 +246,12 @@ Needs:
 - Setup mutable factor depend on horiz_dist to adjust the speed
 - Add all directions
 
->>>>> Day 17: 12/24/2021
-Commit Time:
+>>>>> Day 17: 12/26/2021
+Commit Time: 1h 30'
 Report:
-
+- Create a different files that simulate the 4-direction gather effect
+- Add features of 4-direction to pos_update()
 
 Needs:
-
+-
 

@@ -13,7 +13,6 @@ from pygame.sprite import Sprite
 import math
 import random
 
-
 # Stats
 
 # Screen stats
@@ -21,16 +20,51 @@ scr_height = 500
 scr_width = 800
 
 
+class Square(Sprite):
+	def __init__(self, screen):
+		super().__init__()
+		self.screen = screen
+		self.screen_rect = self.screen.get_rect()
+		self.cube = pygame.Surface((50, 50))
+		self.cube.fill((0, 255, 255))
+		self.rect = self.cube.get_rect()
+		self.direction = 'left'
+
+		self.rect.centerx = self.screen_rect.centerx
+		self.rect.centery = self.screen_rect.centery
+
+		self.left = False
+		self.right = False
+		self.up = False
+		self.down = False
+
+	def update(self):
+		if self.up and self.rect.y >= 0:
+			self.direction = 'up'
+			self.rect.y -= 5
+		elif self.down and self.rect.y <= self.screen_rect.height:
+			self.direction = 'down'
+			self.rect.y += 5
+		elif self.left and self.rect.x >= 0:
+			self.direction = 'left'
+			self.rect.x -= 5
+		elif self.right and self.rect.x <= self.screen_rect.width:
+			self.direction = 'right'
+			self.rect.x += 5
+
+		self.screen.blit(self.cube, (self.rect.x, self.rect.y))
+
+
 class Ball(Sprite):
-	def __init__(self, x, y, radius, color):
+	def __init__(self, x, y, color):
 		Sprite.__init__(self)
-		self.surface = pygame.Surface((radius * 2, radius * 2))
+		self.radius = 10
+		self.surface = pygame.Surface((self.radius * 2, self.radius * 2))
 		self.rect = self.surface.get_rect()
 		self.rect.x = x
 		self.rect.y = y
 		self.resetX = x
 		self.resetY = y
-		self.radius = radius
 		self.color = color
 
 	def reset_position(self):
@@ -43,98 +77,86 @@ class Ball(Sprite):
 
 class ParaBall(Ball):
 
-	def __init__(self, x, y, radius, color, target_circle):
-		super().__init__(x, y, radius, color)
-		self.target_circle = target_circle
-		self.center_x = self.target_circle.rect.x
-		self.center_y = self.rect.y
-		self.horiz_dist = abs(self.rect.x - self.target_circle.rect.x)
-		self.vrt_dist = abs(self.rect.y - self.target_circle.rect.y)
+	def __init__(self, win, x, y, color, target_x, target_y, direction):
+		super().__init__(x, y, color)
+		self.target_x = target_x
+		self.target_y = target_y
+		self.direction = direction
+		self.screen = win
 		self.speed = 3
 
-	# Helper functions for pos_update()
-	def left_right(self, direction):
-		if self.rect.y < self.center_y:
+	# Helper functions for update() aka position update
+	# Helper function: updates linear x or y for horizontal or vertical tendencies
+	def _left_right_y_update(self):
+		if self.rect.y < self.target_y:
 			self.rect.y += self.speed
 		else:
 			self.rect.y -= self.speed
 
-		if direction == 'left':
-			self.rect.x = self.center_x + self.horiz_dist * math.sqrt(
-				abs(1 - ((self.rect.y - self.center_y) / self.vrt_dist)**2))
-		elif direction == 'right':
-			self.rect.x = self.center_x - self.horiz_dist * math.sqrt(
-				abs(1 - ((self.rect.y - self.center_y) / self.vrt_dist) ** 2))
-		pass
-
-	def up_down(self, direction):
-		if self.rect.x < self.center_x:
+	def _up_down_x_update(self):
+		if self.rect.x < self.target_x:
 			self.rect.x += self.speed
 		else:
 			self.rect.x -= self.speed
 
-		if direction == 'up':
-			self.rect.x = self.center_y + self.vrt_dist * math.sqrt(
-				abs(1 - ((self.rect.x - self.center_x) / self.horiz_dist) ** 2))
-		elif direction == 'down':
-			self.rect.x = self.center_y - self.vrt_dist * math.sqrt(
-				abs(1 - ((self.rect.x - self.center_x) / self.horiz_dist) ** 2))
-		pass
+	# Helper functions: different direction cases
+	def _move_left(self, dx, dy):
+		para_center = (self.rect.x, self.target_y)		# center(x,y) of parabolic
+		self._left_right_y_update()
+
+		self.rect.x = para_center[0] - abs(dx) * math.sqrt(
+				abs(1 - ((self.rect.y - para_center[1]) / abs(dy))**2))
+
+	def _move_right(self, dx, dy):
+		para_center = (self.rect.x, self.target_y)
+		self._left_right_y_update()
+
+		self.rect.x = para_center[0] + abs(dx) * math.sqrt(
+			abs(1 - ((self.rect.y - para_center[1]) / abs(dy)) ** 2))
+
+	def _move_up(self, dx, dy):
+		para_center = (self.target_x, self.rect.y)
+		self._up_down_x_update()
+
+		self.rect.y = para_center[1] - abs(dy) * math.sqrt(
+			abs(1 - ((self.rect.x - para_center[0]) / abs(dx)) ** 2))
+
+	def _move_down(self, dx, dy):
+		para_center = (self.target_x, self.rect.y)
+		self._up_down_x_update()
+
+		self.rect.y = para_center[1] + abs(dy) * math.sqrt(
+			abs(1 - ((self.rect.x - para_center[0]) / abs(dx)) ** 2))
 
 	# Position update function
-	def update(self, direction):
-		if self.vrt_dist > 0 and self.horiz_dist > 0:
-			if self.target_circle.direction in ['left', 'right']:
-				self.left_right(direction)
-			else:
-				self.up_down(direction)
+	def update(self):
+		dx = self.rect.x - self.target_x
+		dy = self.rect.y - self.target_y
 
-		# Same x/y position with target
-		elif self.vrt_dist != 0 and self.horiz_dist == 0:
-			self.rect.y -= self.speed
-		elif self.horiz_dist != 0 and self.vrt_dist == 0:
+		if abs(dx) > 0 and abs(dy) > 0:
+			if self.direction == 'up':
+				self._move_up(dx, dy)
+			elif self.direction == 'down':
+				self._move_down(dx, dy)
+			elif self.direction == 'left':
+				self._move_left(dx, dy)
+			elif self.direction == 'right':
+				self._move_right(dx, dy)
+
+		elif dx < 0 and dy == 0:
 			self.rect.x += self.speed
+		elif dx > 0 and dy == 0:
+			self.rect.x -= self.speed
+		elif dx == 0 and dy < 0:
+			self.rect.y += self.speed
+		elif dx == 0 and dy > 0:
+			self.rect.y -= self.speed
 
+		self.draw_circle(self.screen)
 
-# Function spawn_balls()
-# Create a list of ball
-# Parameters: a tuple of position x range,
-# 	position y, number of balls, color
-# Return: a list of circles
-def spawn_circles(range_x, pos_y, num_of_ball, color, target):
-	circle_list = []
-	for i in range(num_of_ball):
-		circle_list.append(ParaBall(random.randrange(
-			range_x[0], range_x[1]), pos_y, 10, color, target))
-	return circle_list
-
-
-# Function ellipse_move()
-# Check and update position of circles in parabolic movement
-# Parameters: a list of circles, a circle target object
-# Return: non
-def ellipse_move(circle_list, direction):
-	for circle in circle_list:
-		circle.update(direction)
-
-
-def check_limit(circle_list):
-	for circle in circle_list:
-		if pygame.sprite.collide_rect(circle, circle.target_circle):
-			circle.reset_position()
-
-
-# Function draw_circles
-def draw_circles(circle_list, win):
-	for circle in circle_list:
-		circle.draw_circle(win)
-
-
-# Function
 
 # Main function
 def main():
-
 	# Game Display
 	pygame.init()
 	win = pygame.display.set_mode((scr_width, scr_height))
@@ -145,9 +167,9 @@ def main():
 	fps = 60
 
 	# Initialize list of ball
-	gather_dist =
-	target = Ball(400, 100, 10, (0, 255, 255))
-	circle_list = spawn_circles((100, 700), 300, 30, (250, 0, 255), target)
+	player = Square(win)
+	target = Ball(player.rect.centerx, player.rect.centery, (0, 255, 255))
+	charge_group = pygame.sprite.Group()
 
 	# Initialize stats
 	run = True
@@ -163,23 +185,20 @@ def main():
 
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_LEFT:
-					pass
+					player.left = True
 				elif event.key == pygame.K_RIGHT:
-					pass
+					player.right = True
 				elif event.key == pygame.K_UP:
-					pass
+					player.right = True
 				elif event.key == pygame.K_DOWN:
-					pass
+					player.right = True
 
-		if move:
-			ellipse_move(circle_list)
-			check_limit(circle_list)
 
-		win.fill((0, 0, 0))
-		target.draw_circle(win)
-		draw_circles(circle_list, win)
-		clock.tick(fps)
-		pygame.display.flip()
+	win.fill((0, 0, 0))
+	target.draw_circle(win)
+
+	clock.tick(fps)
+	pygame.display.flip()
 
 	pygame.quit()
 

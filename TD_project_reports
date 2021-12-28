@@ -253,5 +253,16 @@ Report:
 - Add features of 4-direction to pos_update()
 
 Needs:
--
+- ...
 
+>>>>> Day 18: 12/27/2021
+Commit Time: 30'
+Report:
+- Implement logics of laser_charge_turn.py into parabolic motion
+- Create 6 helper functions for update position of gather particles
+
+Needs:
+- set up update and draw player object
+- set up update and draw paraball objects
+- create a random spawn paraball function
+- create a delete function when exceed limit of particle

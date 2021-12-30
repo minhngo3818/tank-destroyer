@@ -238,8 +238,7 @@ def main():
             charge_group.empty()
 
         for c in charge_group:
-            if (c.rect.x == (player.rect.left + 10) or c.rect.x == player.rect.right
-                    or c.rect.y == (player.rect.top + 10) or c.rect.y == player.rect.bottom):
+            if pygame.sprite.collide_rect(c, player):
                 charge_group.remove(c)
 
         win.fill((0, 0, 0))

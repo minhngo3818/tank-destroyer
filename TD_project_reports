@@ -266,3 +266,14 @@ Needs:
 - set up update and draw paraball objects
 - create a random spawn paraball function
 - create a delete function when exceed limit of particle
+
+>>>>> Day 19: 12/29/2021
+Commit Time: 30'
+Report:
+- Fix bugs black screen
+- Add spawn_particles(), add off-trigger for player movement
+
+Needs:
+- Fix a bug that particles don't update target position
+- Fix too-fast-bug of left and up direction
+

@@ -12,7 +12,6 @@ from sounds import Sounds
 
 
 class Tank_Destroyer:
-
     """INITIALIZATION"""
 
     def __init__(self):
@@ -35,7 +34,7 @@ class Tank_Destroyer:
         self.bullet_group_P = pygame.sprite.Group()  # Player bullet group
         self.bullet_group_E = pygame.sprite.Group()  # Enemy bullet group
         self.bullet_group_B = pygame.sprite.Group()  # Boss canon bullet
-        self.laser_group_B = pygame.sprite.Group()   # Boss laser bullet
+        self.laser_group_B = pygame.sprite.Group()  # Boss laser bullet
         self.laser_charge_group = pygame.sprite.Group()
         self.gatling_group_B = pygame.sprite.Group()  # Boss machine gun bullet
 
@@ -60,9 +59,11 @@ class Tank_Destroyer:
             self.setting.gameover_on = True
 
     def check_collision(self):
-        collision_tolerance = 10 # The area triggers collisions
+        collision_tolerance = 10  # The area triggers collisions
         self.collision_player_enemy(collision_tolerance)
         self.collision_enemy_enemy(collision_tolerance)
+        self.collision_boss_player(collision_tolerance)
+        self.collision_boss_enemy(collision_tolerance)
         self.collision_projectiles()
 
     # Collision helper functions:
@@ -109,7 +110,7 @@ class Tank_Destroyer:
 
     # Player Collides Enemy
     def collision_player_enemy(self, collision_tolerance):
-        for enemy_x in :
+        for enemy_x in self.spawn.enemy_group:
             self.collision_two_single_obj(enemy_x, self.player, collision_tolerance)
 
     # Collision Boss vs Player
@@ -181,15 +182,13 @@ class Tank_Destroyer:
                 self.player.hp -= 1
 
     def boss_get_hit(self):
-
+        pass
 
     def collision_projectiles(self):
         self.enemy_get_hit()
         self.player_get_hit()
 
         self.check_player_stats()
-
-
 
     """SPAWNING PROJECTILES SECTION"""
 
@@ -208,7 +207,7 @@ class Tank_Destroyer:
     # Create Boss Projectiles
     def create_boss_projectile(self):
         if self.setting.boss_spawn and self.spawn.boss.rect.y >= 0:
-            if self.spawn.boss.stop_time == 50 :
+            if self.spawn.boss.stop_time == 50:
                 self.create_boss_gbullet(self.spawn.boss)
 
             elif 100 <= self.spawn.boss.stop_time <= 180:
@@ -221,8 +220,8 @@ class Tank_Destroyer:
         #   Condition for limit gatling bullets
         if len(self.gatling_group_B) <= self.setting.boss_gatling_allow:
             if boss.direction == "up" or boss.direction == "down":
-                x1_g = boss.rect.x + (34/128) * boss.rect.width
-                x2_g = boss.rect.x + (74/128) * boss.rect.width
+                x1_g = boss.rect.x + (34 / 128) * boss.rect.width
+                x2_g = boss.rect.x + (74 / 128) * boss.rect.width
                 y1_g = boss.rect.centery
                 y2_g = y1_g
 
@@ -244,8 +243,8 @@ class Tank_Destroyer:
     def create_boss_gbullet(self, boss):
         #   Condition for limit bullet
         if len(self.bullet_group_B) <= 5:
-            x_b = boss.rect.x + (56/128) * boss.rect.width
-            y_b = boss.rect.y + (56/128) * boss.rect.height
+            x_b = boss.rect.x + (56 / 128) * boss.rect.width
+            y_b = boss.rect.y + (56 / 128) * boss.rect.height
             megabullet = BossBullet(x_b, y_b, "giant", boss.direction)
             self.bullet_group_B.add(megabullet)
             self.sounds.shootPlayer()
@@ -261,11 +260,11 @@ class Tank_Destroyer:
                     #   need embedding a method
                     #   Create charge effect
                     #   May create a method insides boss object
-                    #lasercharge = LaserCharge(...)
-                    #self.laser_charge_group.B.add(lasercharge)
+                    # lasercharge = LaserCharge(...)
+                    # self.laser_charge_group.B.add(lasercharge)
 
-                    #if lasercharge.dx == 0 and lasercharge.dy == 0:
-                        #self.laser_charge_group.remove(lasercharge)
+                    # if lasercharge.dx == 0 and lasercharge.dy == 0:
+                    # self.laser_charge_group.remove(lasercharge)
                     pass
 
                 self.setting.boss_laser_chargetime -= 1
@@ -278,12 +277,7 @@ class Tank_Destroyer:
                 y_l = self.boss.rect.y + self.boss.rect.centery
                 w_l = 16
                 h_l = 50
-                #laser1 = Laser(x_l, y_l, w_l, h_l, self.setting,red)
-                #laser2 = Laser(x_l - 4, y_l, w_l - 4, self.setting.red_med)
-                #laser3 = Laser(x_l - 6, Y_l, w_l - 6, self.setting.red.lite)
-                #self.laser_group_B.add(laser1)
-                #self.laser_group_B.add(laser2)
-                #self.laser_group_B.add(laser3)
+
                 #   Add Sound Here
 
                 self.setting.boss_laser_time += 1
@@ -456,7 +450,7 @@ class Tank_Destroyer:
                 self.sounds.themeTrack()
                 self.redDrawGamePlay()
 
-                #   Turn on Pause Menu or Gameover BG Menu
+                #   Turn on Pause Menu or Game-over BG Menu
                 if self.setting.pause_on:
                     self.menu.gamestopBG("Pause")
                     self.setting.game_on = False

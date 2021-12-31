@@ -60,18 +60,18 @@ class Tank_Destroyer:
             self.setting.gameover_on = True
 
     def check_collision(self):
-        self.collision_tolerance = 10 # The area triggers collisions
-        self.collision_player_enemy()
-        self.collision_enemy_enemy()
+        collision_tolerance = 10 # The area triggers collisions
+        self.collision_player_enemy(collision_tolerance)
+        self.collision_enemy_enemy(collision_tolerance)
         self.collision_projectiles()
 
-    def collision_player_enemy(self):
+    def collision_player_enemy(self, collision_tolerance):
 
         # Player Collides Enemy
         for enemy_x in self.spawn.enemy_group:
             if pygame.sprite.collide_rect(self.player, enemy_x):
 
-                if abs(enemy_x.rect.right - self.player.rect.left) < self.collision_tolerance:
+                if abs(enemy_x.rect.right - self.player.rect.left) < collision_tolerance:
                     self.player.left = False
                     enemy_x.move = False
                     enemy_x.rect.right = self.player.rect.left
@@ -80,7 +80,7 @@ class Tank_Destroyer:
                     if enemy_x.rect.left <= 0:
                         enemy_x.rect.left = 0
 
-                if abs(enemy_x.rect.left - self.player.rect.right) < self.collision_tolerance:
+                if abs(enemy_x.rect.left - self.player.rect.right) < collision_tolerance:
                     self.player.right = False
                     enemy_x.move = False
                     enemy_x.rect.left = self.player.rect.right
@@ -89,7 +89,7 @@ class Tank_Destroyer:
                     if enemy_x.rect.right >= self.width:
                         enemy_x.rect.right = self.width
 
-                if abs(enemy_x.rect.bottom - self.player.rect.top) < self.collision_tolerance:
+                if abs(enemy_x.rect.bottom - self.player.rect.top) < collision_tolerance:
                     self.player.up = False
                     enemy_x.move = False
                     enemy_x.rect.bottom = self.player.rect.top
@@ -98,7 +98,7 @@ class Tank_Destroyer:
                     if enemy_x.rect.top <= 0:
                         enemy_x.rect.top = 0
 
-                if abs(enemy_x.rect.top - self.player.rect.bottom) < self.collision_tolerance:
+                if abs(enemy_x.rect.top - self.player.rect.bottom) < collision_tolerance:
                     self.player.down = False
                     enemy_x.rect.top = self.player.rect.bottom
 
@@ -108,7 +108,7 @@ class Tank_Destroyer:
 
                 self.player.hp -= self.setting.collision_damage
 
-    def collision_enemy_enemy(self):
+    def collision_enemy_enemy(self, collision_tolerance):
         #   Enemy Collides Enemy
         for enemy in self.spawn.enemy_group:
             self.spawn.enemy_group.remove(enemy)
@@ -122,20 +122,20 @@ class Tank_Destroyer:
                 if enemy.direction_number == 0:
 
                     # Check impact tolerance
-                    if abs(enemy_remain.rect.left - enemy.rect.right) < self.collision_tolerance:
+                    if abs(enemy_remain.rect.left - enemy.rect.right) < collision_tolerance:
 
                         enemy.rect.right = enemy_remain.rect.left
 
-                    elif abs(enemy_remain.rect.right - enemy.rect.left) < self.collision_tolerance:
+                    elif abs(enemy_remain.rect.right - enemy.rect.left) < collision_tolerance:
                         enemy.rect.left = enemy_remain.rect.right
 
                 if enemy.direction_number == 1:
 
-                    if abs(enemy_remain.rect.top - enemy.rect.bottom) < self.collision_tolerance:
+                    if abs(enemy_remain.rect.top - enemy.rect.bottom) < collision_tolerance:
 
                         enemy.rect.bottom = enemy_remain.rect.top
 
-                    elif abs(enemy_remain.rect.bottom - enemy.rect.top) < self.collision_tolerance:
+                    elif abs(enemy_remain.rect.bottom - enemy.rect.top) < collision_tolerance:
 
                         enemy.rect.top = enemy_remain.rect.bottom
 
@@ -176,7 +176,6 @@ class Tank_Destroyer:
 
     def collision_boss_projectiles(self):
         pass
-
 
     """SPAWNING PROJECTILES SECTION"""
 

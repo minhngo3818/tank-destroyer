@@ -211,7 +211,7 @@ class Particles(Sprite):
         self.draw_circle(win)
 
 
-def spawn_particles(win, charge_group, density, player):
+def spawn_particles(charge_group, density, player):
     pos_x = 0
     pos_y = 0
     pos_gather_x = 0

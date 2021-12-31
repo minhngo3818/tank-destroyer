@@ -51,7 +51,8 @@ class Stats:
             self.bulletGroup_P.remove(bullet)
         for enemy in self.enemyGroup:
             self.enemyGroup.remove(enemy)
-        for boss in self.spawn.boss_group:
-            self.spawn.boss_group.remove(boss)
+        if self.setting.boss_spawn:
+            self.spawn.boss.kill(self)
+
 
 

@@ -20,7 +20,7 @@ class Tank_Destroyer:
 
         #   Initialize Foundation
         self.setting = Settings()
-        self.bg = pygame.image.load("images/ground_2.png")
+        self.bg = pygame.image.load("images/tank_field.png")
         self.width = self.setting.scr_width
         self.height = self.setting.scr_height
         self.screen = pygame.display.set_mode((self.width, self.height))
@@ -65,51 +65,65 @@ class Tank_Destroyer:
         self.collision_enemy_enemy(collision_tolerance)
         self.collision_projectiles()
 
+    # Collision helper functions:
+    def collision_two_single_obj(self, obj1, obj2, collision_tolerance):
+        if pygame.sprite.collide_rect(obj1, obj2):
+
+            if abs(obj1.rect.right - obj2.rect.left) < collision_tolerance:
+                self.player.left = False
+                obj1.move = False
+                obj1.rect.right = obj2.rect.left
+
+                # (*) Prevent pushing over \left edge
+                if obj1.rect.left <= 0:
+                    obj1.rect.left = 0
+
+            if abs(obj1.rect.left - obj2.rect.right) < collision_tolerance:
+                obj2.right = False
+                obj1.move = False
+                obj1.rect.left = obj2.rect.right
+
+                # (*) Prevent pushing over right edge
+                if obj1.rect.right >= self.width:
+                    obj1.rect.right = self.width
+
+            if abs(obj1.rect.bottom - obj2.rect.top) < collision_tolerance:
+                obj2.up = False
+                obj1.move = False
+                obj1.rect.bottom = obj2.rect.top
+
+                # (*) Prevent pushing over bottom edge
+                if obj1.rect.top <= 0:
+                    obj1.rect.top = 0
+
+            if abs(obj1.rect.top - obj2.rect.bottom) < collision_tolerance:
+                obj2.down = False
+                obj1.rect.top = obj2.rect.bottom
+
+                # (*)
+                if obj1.rect.bottom >= self.height:
+                    obj1.rect.bottom = self.height
+
+            obj2.hp -= self.setting.collision_damage
+        pass
+
+    # Player Collides Enemy
     def collision_player_enemy(self, collision_tolerance):
+        for enemy_x in :
+            self.collision_two_single_obj(enemy_x, self.player, collision_tolerance)
 
-        # Player Collides Enemy
-        for enemy_x in self.spawn.enemy_group:
-            if pygame.sprite.collide_rect(self.player, enemy_x):
+    # Collision Boss vs Player
+    def collision_boss_player(self, collision_tolerance):
+        self.collision_two_single_obj(self.spawn.boss, self.player, collision_tolerance)
 
-                if abs(enemy_x.rect.right - self.player.rect.left) < collision_tolerance:
-                    self.player.left = False
-                    enemy_x.move = False
-                    enemy_x.rect.right = self.player.rect.left
+    # Collision Boss vs Enemy group
+    def collision_boss_enemy(self, collision_tolerance):
+        for enemy in self.spawn.enemy_group:
+            self.collision_two_single_obj(enemy, self.spawn.boss, collision_tolerance)
 
-                    # (*) Prevent pushing over \left edge
-                    if enemy_x.rect.left <= 0:
-                        enemy_x.rect.left = 0
-
-                if abs(enemy_x.rect.left - self.player.rect.right) < collision_tolerance:
-                    self.player.right = False
-                    enemy_x.move = False
-                    enemy_x.rect.left = self.player.rect.right
-
-                    # (*) Prevent pushing over right edge
-                    if enemy_x.rect.right >= self.width:
-                        enemy_x.rect.right = self.width
-
-                if abs(enemy_x.rect.bottom - self.player.rect.top) < collision_tolerance:
-                    self.player.up = False
-                    enemy_x.move = False
-                    enemy_x.rect.bottom = self.player.rect.top
-
-                    # (*) Prevent pushing over bottom edge
-                    if enemy_x.rect.top <= 0:
-                        enemy_x.rect.top = 0
-
-                if abs(enemy_x.rect.top - self.player.rect.bottom) < collision_tolerance:
-                    self.player.down = False
-                    enemy_x.rect.top = self.player.rect.bottom
-
-                    # (*)
-                    if enemy_x.rect.bottom >= self.height:
-                        enemy_x.rect.bottom = self.height
-
-                self.player.hp -= self.setting.collision_damage
-
+    #   Enemy Collides Enemy
     def collision_enemy_enemy(self, collision_tolerance):
-        #   Enemy Collides Enemy
+
         for enemy in self.spawn.enemy_group:
             self.spawn.enemy_group.remove(enemy)
 
@@ -141,15 +155,9 @@ class Tank_Destroyer:
 
             self.spawn.enemy_group.add(enemy)
 
-    def collision_boss_player(self):
-        pass
-
-    def collision_boss_enemy(self):
-        pass
-
-    def collision_projectiles(self):
-        #   Bullet Collision:
-        #   Bullets From Player
+    # PROJECTILE COLLISION
+    # Helper functions
+    def enemy_get_hit(self):
         for bullet in self.bullet_group_P:
             enemy_hit = pygame.sprite.spritecollide(bullet, self.spawn.enemy_group, False)
 
@@ -166,16 +174,22 @@ class Tank_Destroyer:
                     #   Increment of score per defeated enemy
                     self.stats.points()
 
-            #   Bullets From Enemy
+    def player_get_hit(self):
         for bullet in self.bullet_group_E:
             if pygame.sprite.collide_rect(bullet, self.player):
                 self.bullet_group_E.remove(bullet)
                 self.player.hp -= 1
 
+    def boss_get_hit(self):
+
+
+    def collision_projectiles(self):
+        self.enemy_get_hit()
+        self.player_get_hit()
+
         self.check_player_stats()
 
-    def collision_boss_projectiles(self):
-        pass
+
 
     """SPAWNING PROJECTILES SECTION"""
 
@@ -206,27 +220,26 @@ class Tank_Destroyer:
 
         #   Condition for limit gatling bullets
         if len(self.gatling_group_B) <= self.setting.boss_gatling_allow:
-                if boss.direction == "up" or boss.direction == "down":
-                    x1_g = boss.rect.x + (34/128) * boss.rect.width
-                    x2_g = boss.rect.x + (74/128) * boss.rect.width
-                    y1_g = boss.rect.centery
-                    y2_g = y1_g
+            if boss.direction == "up" or boss.direction == "down":
+                x1_g = boss.rect.x + (34/128) * boss.rect.width
+                x2_g = boss.rect.x + (74/128) * boss.rect.width
+                y1_g = boss.rect.centery
+                y2_g = y1_g
 
-                elif boss.direction == "left" or boss.direction == "right":
-                    y1_g = boss.rect.y + (34 / 128) * boss.rect.width
-                    y2_g = boss.rect.y + (74 / 128) * boss.rect.width
-                    x1_g = boss.rect.centerx
-                    x2_g = x1_g
+            elif boss.direction == "left" or boss.direction == "right":
+                y1_g = boss.rect.y + (34 / 128) * boss.rect.width
+                y2_g = boss.rect.y + (74 / 128) * boss.rect.width
+                x1_g = boss.rect.centerx
+                x2_g = x1_g
 
-                bulletL = BossBullet(x1_g, y1_g, "gatling", boss.direction)
-                bulletR = BossBullet(x2_g, y2_g, "gatling", boss.direction)
-                self.gatling_group_B.add(bulletL)
-                self.gatling_group_B.add(bulletR)
-                self.sounds.machineGun()
+            bullet_left = BossBullet(x1_g, y1_g, "gatling", boss.direction)
+            bullet_right = BossBullet(x2_g, y2_g, "gatling", boss.direction)
+            self.gatling_group_B.add(bullet_left)
+            self.gatling_group_B.add(bullet_right)
+            self.sounds.machineGun()
         else:
             for bullet in self.gatling_group_B:
                 self.gatling_group_B.remove(bullet)
-
 
     def create_boss_gbullet(self, boss):
         #   Condition for limit bullet

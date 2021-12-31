@@ -1,4 +1,6 @@
 import pygame
+import math
+import random
 
 from pygame.sprite import Sprite
 from settings import Settings
@@ -122,34 +124,118 @@ class Laser(Sprite):
         win.blit(rotated_image, (self.rect.x, self.rect.y))
 
 
-class LaserCharge(Sprite):
-    def __init__(self, x, y, color):
-        super().__init__()
+class Particles(Sprite):
+    def __init__(self, x, y, target_x, target_y, color, direction):
+        Sprite.__init__(self)
+        self.radius = 10
+        self.surface = pygame.Surface((self.radius * 2, self.radius * 2))
+        self.rect = self.surface.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.color = color
+        self.target_x = target_x
+        self.target_y = target_y
+        self.direction = direction
+        self.speed = 3
 
-        self.setting = Settings()
+    def draw_circle(self, win):
+        pygame.draw.circle(win, self.color, (self.rect.x, self.rect.y), self.radius)
 
-        self.x = x
-        self.y = y
-        self.image = pygame.Surface((5, 5))
-        self.image.fill(color)
-        self.rect = self.image.get_rect()
+    # Helper functions for update() aka position update
+    # Helper function: updates linear x or y for horizontal or vertical tendencies
+    def _left_right_y_update(self):
+        if self.rect.y < self.target_y:
+            self.rect.y += self.speed
+        else:
+            self.rect.y -= self.speed
 
-        self.dx = 0
-        self.dy = 0
-        self.speed = self.setting.boss_charge_particle_speed
+    def _up_down_x_update(self):
+        if self.rect.x < self.target_x:
+            self.rect.x += self.speed
+        else:
+            self.rect.x -= self.speed
 
-    def update(self, cannon_pos_x, cannon_pos_y, win):
-        self.dx = cannon_pos_x - self.x
-        self.dy = cannon_pos_y - self.y
+    # Helper functions: different direction cases
+    def _move_left(self, dx, dy):
+        para_center = (self.rect.x, self.target_y)  # center(x,y) of parabolic
+        self._left_right_y_update()
 
-        if self.dx <= 0:
-            self.rect.x += max(self.dx, -self.speed)
-        elif self.dx > 0:
-            self.rect.x += min(self.dx, self.speed)
+        self.rect.x = para_center[0] + abs(dx) * math.sqrt(
+            abs(1 - ((self.rect.y - para_center[1]) / abs(dy)) ** 2))
 
-        if self.dy <= 0:
-            self.rect.y += max(self.dy, -self.speed)
-        elif self.dy > 0:
-            self.rect.y += min(self.dy, self.speed)
+    def _move_right(self, dx, dy):
+        para_center = (self.rect.x, self.target_y)
+        self._left_right_y_update()
 
-        win.blit(self.image, (self.rect.x, self.rect.y))
+        self.rect.x = para_center[0] - abs(dx) * math.sqrt(
+            abs(1 - ((self.rect.y - para_center[1]) / abs(dy)) ** 2))
+
+    def _move_up(self, dx, dy):
+        para_center = (self.target_x, self.rect.y)
+        self._up_down_x_update()
+
+        self.rect.y = para_center[1] + abs(dy) * math.sqrt(
+            abs(1 - ((self.rect.x - para_center[0]) / abs(dx)) ** 2))
+
+    def _move_down(self, dx, dy):
+        para_center = (self.target_x, self.rect.y)
+        self._up_down_x_update()
+
+        self.rect.y = para_center[1] - abs(dy) * math.sqrt(
+            abs(1 - ((self.rect.x - para_center[0]) / abs(dx)) ** 2))
+
+    # Position update function
+    def update(self, win):
+        dx = self.rect.x - self.target_x
+        dy = self.rect.y - self.target_y
+
+        if abs(dx) > 0 and abs(dy) > 0:
+            if self.direction == 'up':
+                self._move_up(dx, dy)
+            elif self.direction == 'down':
+                self._move_down(dx, dy)
+            elif self.direction == 'left':
+                self._move_left(dx, dy)
+            elif self.direction == 'right':
+                self._move_right(dx, dy)
+
+        elif dx < 0 and dy == 0:
+            self.rect.x += self.speed
+        elif dx > 0 and dy == 0:
+            self.rect.x -= self.speed
+        elif dx == 0 and dy < 0:
+            self.rect.y += self.speed
+        elif dx == 0 and dy > 0:
+            self.rect.y -= self.speed
+
+        self.draw_circle(win)
+
+
+def spawn_particles(win, charge_group, density, player):
+    pos_x = 0
+    pos_y = 0
+    pos_gather_x = 0
+    pos_gather_y = 0
+
+    if player.direction == "up":
+        pos_x = random.randrange(player.rect.x - 50, player.rect.x + 100)
+        pos_y = random.randrange(player.rect.y - 50, player.rect.y - 10)
+        (pos_gather_x, pos_gather_y) = player.rect.midtop
+
+    elif player.direction == "down":
+        pos_x = random.randrange(player.rect.x - 50, player.rect.x + 100)
+        pos_y = random.randrange(player.rect.y + 50, player.rect.y + 100)
+        (pos_gather_x, pos_gather_y) = player.rect.midbottom
+
+    elif player.direction == "left":
+        pos_x = random.randrange(player.rect.x - 50, player.rect.x - 10)
+        pos_y = random.randrange(player.rect.y - 50, player.rect.y + 100)
+        (pos_gather_x, pos_gather_y) = player.rect.midleft
+
+    elif player.direction == "right":
+        pos_x = random.randrange(player.rect.x + 50, player.rect.x + 100)
+        pos_y = random.randrange(player.rect.y - 50, player.rect.y + 100)
+        (pos_gather_x, pos_gather_y) = player.rect.midright
+
+    for i in range(density):
+        charge_group.add(Particles(pos_x, pos_y, pos_gather_x, pos_gather_y, (255, 0, 255), player.direction))

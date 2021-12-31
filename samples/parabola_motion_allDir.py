@@ -160,7 +160,7 @@ def spawn_particles(win, charge_group, density, player):
     pos_y = 0
     pos_gather_x = 0
     pos_gather_y = 0
-123
+
     if player.direction == "up":
         pos_x = random.randrange(player.rect.x - 50, player.rect.x + 100)
         pos_y = random.randrange(player.rect.y - 50, player.rect.y - 10)

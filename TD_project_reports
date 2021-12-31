@@ -287,3 +287,15 @@ Needs:
 - Implement charge effect mechanic
 - Implement collision mechanic
 
+>>>> Day 21: 12/31/2021
+Commit Time: 2h
+Report:
+- Update collision for player, boss, and enemy
+- Update Spawn Class by removing boss group
+- Update stats.py to work with Boss obj instead of boss group
+
+Needs:
+- Laser timer
+- Particles charge and timer
+- Collision for boss's projectile
+

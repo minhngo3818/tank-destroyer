@@ -237,8 +237,15 @@ def main():
         else:
             charge_group.empty()
 
+        # Eliminate particles that collide with the player obj
+        # Eliminate particles that store old target direction by create a limit of position
         for c in charge_group:
-            if pygame.sprite.collide_rect(c, player):
+            if (pygame.sprite.collide_rect(c, player) or (
+                (player.direction == 'up' and c.rect.y >= player.rect.midtop[1]) or
+                (player.direction == 'down' and c.rect.y <= player.rect.midbottom[1]) or
+                (player.direction == 'left' and c.rect.x >= player.rect.midleft[0]) or
+                (player.direction == 'right' and c.rect.x <= player.rect.midright[0])
+            )):
                 charge_group.remove(c)
 
         win.fill((0, 0, 0))

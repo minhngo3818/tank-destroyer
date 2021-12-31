@@ -277,3 +277,13 @@ Needs:
 - Fix a bug that particles don't update target position
 - Fix too-fast-bug of left and up direction
 
+>>>>> Day 20: 12/30/2021
+Commit Time: 2h
+Report:
+- Fix bug that particles are not destroyed when player move or not collide with the player obj
+- Succeeded
+
+Needs:
+- Implement charge effect mechanic
+- Implement collision mechanic
+

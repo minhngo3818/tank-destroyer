@@ -322,7 +322,6 @@ class TankDestroyer:
                     self.setting.menu_on = False
                     self.setting.game_on = True
 
-                    #   Reset Game Data When Call
                     self.stats.reset_game()
 
                 elif self.setting.pause_on:
@@ -431,7 +430,7 @@ class TankDestroyer:
         self.bullet_group_B.update(self.screen)
         self.gatling_group_B.update(self.screen)
         self.laser_charge_group.update(self.screen)
-        self.player.animation(self.screen)
+        self.player.update(self.screen)
         self.spawn.update_spawn()
         self.check_collision()
         self.interface.run_updates(self.player.hp, self.player.life, self.setting.level, self.stats.score)

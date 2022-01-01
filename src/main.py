@@ -1,7 +1,7 @@
 import sys
-#import pygame
+# import pygame
 
-#from settings import Settings
+# from settings import Settings
 from menu import Menu
 from src.interface import Interface
 from player import Player
@@ -11,7 +11,7 @@ from stats import Stats
 from sounds import Sounds
 
 
-class Tank_Destroyer:
+class TankDestroyer:
 
     """INITIALIZATION"""
     def __init__(self):
@@ -31,12 +31,12 @@ class Tank_Destroyer:
         self.FPS = self.setting.FPS
 
         #   Projectile Groups
-        self.bullet_group_P = pygame.sprite.Group()     # Player bullet group
-        self.bullet_group_E = pygame.sprite.Group()     # Enemy bullet group
-        self.bullet_group_B = pygame.sprite.Group()     # Boss canon bullet
-        self.laser_group_B = pygame.sprite.Group()      # Boss laser bullet
-        self.laser_charge_group = pygame.sprite.Group() # Boss laser charge effect
-        self.gatling_group_B = pygame.sprite.Group()    # Boss machine gun bullet
+        self.bullet_group_P = pygame.sprite.Group()      # Player bullet group
+        self.bullet_group_E = pygame.sprite.Group()      # Enemy bullet group
+        self.bullet_group_B = pygame.sprite.Group()      # Boss canon bullet
+        self.laser_group_B = pygame.sprite.Group()       # Boss laser bullet
+        self.laser_charge_group = pygame.sprite.Group()  # Boss laser charge effect
+        self.gatling_group_B = pygame.sprite.Group()     # Boss machine gun bullet
 
         #   Initialize Classes
         self.player = Player(self)
@@ -183,7 +183,7 @@ class Tank_Destroyer:
 
     def boss_get_hit(self, boss):
         for bullet in self.bullet_group_P:
-            if pygame.sprite.collide_rect(self.spawn.boss):
+            if pygame.sprite.collide_rect(boss, bullet):
                 self.bullet_group_P.remove(bullet)
                 self.spawn.boss.hp -= 1
 
@@ -467,5 +467,5 @@ class Tank_Destroyer:
 
 
 if __name__ == '__main__':
-    ai = Tank_Destroyer()
+    ai = TankDestroyer()
     ai.main_loop()

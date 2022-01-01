@@ -245,8 +245,7 @@ class Tank_Destroyer:
         if len(self.bullet_group_B) <= 5:
             x_b = boss.rect.x + (56 / 128) * boss.rect.width
             y_b = boss.rect.y + (56 / 128) * boss.rect.height
-            megabullet = BossBullet(x_b, y_b, "giant", boss.direction)
-            self.bullet_group_B.add(megabullet)
+            self.bullet_group_B.add(BossBullet(x_b, y_b, "giant", boss.direction))
             self.sounds.shootPlayer()
 
     def create_boss_laser(self):

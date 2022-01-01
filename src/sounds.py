@@ -40,6 +40,12 @@ class Sounds:
         self.gatling_effect.set_volume(0.2)
         self.channel7.play(self.gatling_effect)
 
+    def chargeSound(self):
+        pass
+
+    def shootLaser(self):
+        pass
+
     def explodeSound(self):
         pass
 

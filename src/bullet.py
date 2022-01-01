@@ -105,12 +105,17 @@ class Laser(Sprite):
             self.image.fill(color)
             self.rect = self.image.get_rect()
 
-
     def create_laser(self):
         self.laser_list.append(self.LaserLayer((204, 0, 0), self.width, self.height))     # Outer
         self.laser_list.append(self.LaserLayer((255, 51, 51), self.width, self.height))     # Mid
         self.laser_list.append(self.LaserLayer((255, 204, 204), self.width, self.height))     # Inner
 
+    def rotate_laser(self, x, y, angle):
+        rotated_list = []
+        for laser in self.laser_list:
+            rotated_image = pygame.transform.rotate(laser.image, angle)
+            rotated_rect = rotated_image.get_rect(center=laser.image.get_rect(center=(x, y)).center)
+            rotated_list.append((rotated_image, rotated_rect))
 
     def update(self, win):
         angle = 0
@@ -132,7 +137,7 @@ class Laser(Sprite):
             self.kill()
 
         rotate_image = pygame.transform.rotate(self.image, angle)
-        rotate_rect = rotate_image.get_rect(center=self.image.get_rect(center=(self.rect.x, self.rect.y)).center
+        rotate_rect = rotate_image.get_rect(center=self.image.get_rect(center=(self.rect.x, self.rect.y)).center)
 
         win.blit(rotate_image, (rotate_rect.x, rotate_rect.y))
 

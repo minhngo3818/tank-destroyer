@@ -31,12 +31,12 @@ class Tank_Destroyer:
         self.FPS = self.setting.FPS
 
         #   Projectile Groups
-        self.bullet_group_P = pygame.sprite.Group()  # Player bullet group
-        self.bullet_group_E = pygame.sprite.Group()  # Enemy bullet group
-        self.bullet_group_B = pygame.sprite.Group()  # Boss canon bullet
-        self.laser_group_B = pygame.sprite.Group()  # Boss laser bullet
-        self.laser_charge_group = pygame.sprite.Group()
-        self.gatling_group_B = pygame.sprite.Group()  # Boss machine gun bullet
+        self.bullet_group_P = pygame.sprite.Group()     # Player bullet group
+        self.bullet_group_E = pygame.sprite.Group()     # Enemy bullet group
+        self.bullet_group_B = pygame.sprite.Group()     # Boss canon bullet
+        self.laser_group_B = pygame.sprite.Group()      # Boss laser bullet
+        self.laser_charge_group = pygame.sprite.Group() # Boss laser charge effect
+        self.gatling_group_B = pygame.sprite.Group()    # Boss machine gun bullet
 
         #   Initialize Classes
         self.player = Player(self)

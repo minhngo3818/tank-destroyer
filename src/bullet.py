@@ -99,28 +99,17 @@ class Laser(Sprite):
         self.laser_list = []
 
     # Add multiple layer object
-    class OuterLaser(object):
-        def __init__(self, width, height):
-            self.color = (204,0,0)
-            self.outer_image = pygame.Surface((width, height))
-            self.rect = self.outer_image.get_rect()
+    class LaserLayer(object):
+        def __init__(self, color, width, height):
+            self.image = pygame.Surface((width, height))
+            self.image.fill(color)
+            self.rect = self.image.get_rect()
 
-    class MidLaser(object):
-        def __init__(self, width, height):
-            self.color = (255, 51, 51)
-            self.mid_image = pygame.Surface((width, height))
-            self.rect = self.mid_image.get_rect()
-
-    class InnerLaser(object):
-        def __init__(self, width, height):
-            self.color = (255, 204, 204)
-            self.inner_image = pygame.Surface((width - 20, height))
-            self.rect = self.inner_image.get_rect()
 
     def create_laser(self):
-        self.laser_list.append(self.OuterLaser(self.width, self.height))
-        self.laser_list.append(self.MidLaser(self.width, self.height))
-        self.laser_list.append(self.InnerLaser(self.width, self.height))
+        self.laser_list.append(self.LaserLayer((204, 0, 0), self.width, self.height))     # Outer
+        self.laser_list.append(self.LaserLayer((255, 51, 51), self.width, self.height))     # Mid
+        self.laser_list.append(self.LaserLayer((255, 204, 204), self.width, self.height))     # Inner
 
 
     def update(self, win):

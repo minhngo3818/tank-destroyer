@@ -279,7 +279,7 @@ class Tank_Destroyer:
         else:
             self.setting.boss_cooldown -= 1
         pass
-        pass
+
     """KEY SECTIONS"""
 
     def check_selection(self, event):

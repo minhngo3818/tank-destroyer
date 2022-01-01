@@ -59,7 +59,6 @@ while run:
 	elif cooldown > 0:
 		cooldown -= 1
 
-
 	for l in laser_group:
 		if l.rect.y == -1:
 			laser_group.remove(l)

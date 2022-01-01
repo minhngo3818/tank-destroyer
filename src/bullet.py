@@ -267,3 +267,13 @@ def spawn_particles(charge_group, density, player):
 
     for i in range(density):
         charge_group.add(Particles(pos_x, pos_y, pos_gather_x, pos_gather_y, (255, 0, 255), player.direction))
+
+def remove_particles(charge_group, boss):
+    for c in charge_group:
+        if (pygame.sprite.collide_rect(c, boss) or (
+                (boss.direction == 'up' and c.rect.y >= boss.rect.midtop[1]) or
+                (boss.direction == 'down' and c.rect.y <= boss.rect.midbottom[1]) or
+                (boss.direction == 'left' and c.rect.x >= boss.rect.midleft[0]) or
+                (boss.direction == 'right' and c.rect.x <= boss.rect.midright[0])
+        )):
+            charge_group.remove(c)

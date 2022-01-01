@@ -1,19 +1,19 @@
 import sys
-import pygame
+#import pygame
 
-from settings import Settings
+#from settings import Settings
 from menu import Menu
 from src.interface import Interface
 from player import Player
 from spawn_enemy import Spawn
-from src.bullet import Bullet, BossBullet
+from bullet import *
 from stats import Stats
 from sounds import Sounds
 
 
 class Tank_Destroyer:
-    """INITIALIZATION"""
 
+    """INITIALIZATION"""
     def __init__(self):
         pygame.init()
 
@@ -253,20 +253,15 @@ class Tank_Destroyer:
         if self.setting.boss_cooldown == 0:
             if self.setting.boss_laser_chargetime == 50:
                 #   Add Laser Charge Effect
-                for amount in range(self.setting.boss_charge_density):
-                    #   pass the positions for 4 directions
-                    #   need embedding a method
-                    #   Create charge effect
-                    #   May create a method insides boss object
-                    # lasercharge = LaserCharge(...)
-                    # self.laser_charge_group.B.add(lasercharge)
+                spawn_particles(self.laser_charge_group,
+                                self.setting.boss_charge_density,
+                                self.player)
 
-                    # if lasercharge.dx == 0 and lasercharge.dy == 0:
-                    # self.laser_charge_group.remove(lasercharge)
-                    pass
+                pass
 
                 self.setting.boss_laser_chargetime -= 1
             elif self.setting.boss_laser_chargetime == 0:
+                self.laser_charge_group.empty()
                 self.setting.boss_laser_chargetime = 50
                 self.setting.boss_laser_time = 0
 

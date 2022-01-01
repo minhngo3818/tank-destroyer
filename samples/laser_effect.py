@@ -25,6 +25,7 @@ class Laser(Sprite):
 
 		screen.blit(self.surface, (self.x, self.y))
 
+
 box = pygame.Surface((50,50))
 box.fill((0,255,255))
 box_rect = box.get_rect()

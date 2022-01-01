@@ -86,7 +86,7 @@ class BossBullet(Sprite):
 
 
 class Laser(Sprite):
-    def __init__(self, x, y, w, h, color, direction):
+    def __init__(self, x, y, w, h, direction):
         super().__init__()
 
         self.setting = Settings()
@@ -94,35 +94,58 @@ class Laser(Sprite):
         self.height = h
         self.x = x
         self.y = y
-        self.color = color
         self.direction = direction
         self.angle = 0
+        self.laser_list = []
 
-        self.image = pygame.Surface((self.width, self.height))
-        self.image.fill(self.color)
-        self.rect = self.image.get_rect()
+    # Add multiple layer object
+    class OuterLaser(object):
+        def __init__(self, width, height):
+            self.color = (204,0,0)
+            self.outer_image = pygame.Surface((width, height))
+            self.rect = self.outer_image.get_rect()
+
+    class MidLaser(object):
+        def __init__(self, width, height):
+            self.color = (255, 51, 51)
+            self.mid_image = pygame.Surface((width, height))
+            self.rect = self.mid_image.get_rect()
+
+    class InnerLaser(object):
+        def __init__(self, width, height):
+            self.color = (255, 204, 204)
+            self.inner_image = pygame.Surface((width - 20, height))
+            self.rect = self.inner_image.get_rect()
+
+    def create_laser(self):
+        self.laser_list.append(self.OuterLaser(self.width, self.height))
+        self.laser_list.append(self.MidLaser(self.width, self.height))
+        self.laser_list.append(self.InnerLaser(self.width, self.height))
+
 
     def update(self, win):
-        if self.direction == "left":
-            self.angle = 90
-            self.rect.x -= self.setting.boss_laser_speed
-        elif self.direction == "right":
-            self.angle = 270
-            self.rect.x += self.setting.boss_laser_speed
-        elif self.direction == "up":
-            self.angle = 0
-            self.rect.y -= self.setting.boss_laser_speed
+        angle = 0
+        if self.direction == "up":
+            angle = 0
+            self.rect.y -= 20
         elif self.direction == "down":
-            self.angle = 180
-            self.rect.y += self.setting.boss_laser_speed
+            angle = 180
+            self.rect.y += 20
+        elif self.direction == "left":
+            angle = 90
+            self.rect.x -= 20
+        elif self.direction == "right":
+            angle = 270
+            self.rect.x += 20
 
-        if self.rect.x < 0 or self.rect.x > self.setting.scr_width \
-                or self.rect.y < 0 or self.rect.y > self.setting.scr_height:
+        if (self.rect.x <= 0 or self.rect.x >= self.setting.scr_width
+                or self.rect.y <= 0 or self.rect.y >= self.setting.scr_height):
             self.kill()
 
-        rotated_image = pygame.trasnform.rotate(self.image, self.angle)
-        win.blit(rotated_image, (self.rect.x, self.rect.y))
+        rotate_image = pygame.transform.rotate(self.image, angle)
+        rotate_rect = rotate_image.get_rect(center=self.image.get_rect(center=(self.rect.x, self.rect.y)).center
 
+        win.blit(rotate_image, (rotate_rect.x, rotate_rect.y))
 
 class Particles(Sprite):
     def __init__(self, x, y, target_x, target_y, color, direction):

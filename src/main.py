@@ -248,7 +248,6 @@ class Tank_Destroyer:
             megabullet = BossBullet(x_b, y_b, "giant", boss.direction)
             self.bullet_group_B.add(megabullet)
             self.sounds.shootPlayer()
-            #   Add Sound Effect
 
     def create_boss_laser(self):
         #    Condition for limit bullet

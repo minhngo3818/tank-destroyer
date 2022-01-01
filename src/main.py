@@ -248,7 +248,7 @@ class Tank_Destroyer:
             self.bullet_group_B.add(BossBullet(x_b, y_b, "giant", boss.direction))
             self.sounds.shootPlayer()
 
-    def create_boss_laser(self):
+    def create_boss_laser(self, boss):
         #    Condition for limit bullet
         if self.setting.boss_cooldown == 0:
             if self.setting.boss_laser_chargetime == 50:
@@ -256,24 +256,23 @@ class Tank_Destroyer:
                 spawn_particles(self.laser_charge_group,
                                 self.setting.boss_charge_density,
                                 self.player)
-
-                pass
-
+                self.sounds.chargeSound()
                 self.setting.boss_laser_chargetime -= 1
             elif self.setting.boss_laser_chargetime == 0:
                 self.laser_charge_group.empty()
+
+                if len(self.bullet_group_B) <= 5:
+                    x_b = boss.rect.x + (56 / 128) * boss.rect.width
+                    y_b = boss.rect.y + (56 / 128) * boss.rect.height
+                    self.laser_group_B.add(Laser(x_b, y_b, 10, 50, boss.direction))
+                    self.sounds.shootLaser()
+
                 self.setting.boss_laser_chargetime = 50
                 self.setting.boss_laser_time = 0
 
             # Add spawn before boss suffix
             if self.setting.boss_laser_time == 0:
-                x_l = self.spawn.boss.rect.x + (56 / 128) * self.spawn.boss.rect.width
-                y_l = self.spawn.boss.rect.y + self.spawn.boss.rect.centery
-                w_l = 16
-                h_l = 50
-
-                #   Add Sound Here
-
+                self.laser_group_B.empty()
                 self.setting.boss_laser_time += 1
             elif self.setting.boss_laser_time == 80:
                 self.setting.boss_cooldown = 200
@@ -426,6 +425,7 @@ class Tank_Destroyer:
         self.bullet_group_P.update(self.screen)
         self.bullet_group_B.update(self.screen)
         self.gatling_group_B.update(self.screen)
+        self.laser_charge_group.update(self.screen)
         self.player.animation(self.screen)
         self.spawn.update_spawn()
         self.check_collision()

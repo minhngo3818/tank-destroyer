@@ -50,7 +50,7 @@ class Player(Sprite):
         self.hp = self.access.setting.player_health
         self.life = self.access.setting.player_life
 
-    def animation(self, win):
+    def update(self, win):
         self.movement()
         if self.run_frame:
             self.index += self.frame_rate

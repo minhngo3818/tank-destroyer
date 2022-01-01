@@ -181,13 +181,19 @@ class Tank_Destroyer:
                 self.bullet_group_E.remove(bullet)
                 self.player.hp -= 1
 
-    def boss_get_hit(self):
-        pass
+    def boss_get_hit(self, boss):
+        for bullet in self.bullet_group_P:
+            if pygame.sprite.collide_rect(self.spawn.boss):
+                self.bullet_group_P.remove(bullet)
+                self.spawn.boss.hp -= 1
+
+                if self.spawn.boss.hp == 0:
+                    self.spawn.boss.kill()
 
     def collision_projectiles(self):
         self.enemy_get_hit()
         self.player_get_hit()
-
+        self.boss_get_hit(self.spawn.boss)
         self.check_player_stats()
 
     """SPAWNING PROJECTILES SECTION"""
@@ -278,7 +284,6 @@ class Tank_Destroyer:
                 self.setting.boss_cooldown = 200
         else:
             self.setting.boss_cooldown -= 1
-
 
     """KEY SECTIONS"""
 

@@ -278,7 +278,7 @@ class Tank_Destroyer:
                 self.setting.boss_cooldown = 200
         else:
             self.setting.boss_cooldown -= 1
-        pass
+
 
     """KEY SECTIONS"""
 

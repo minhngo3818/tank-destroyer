@@ -18,9 +18,11 @@ class Sounds:
         self.gatling_effect = mixer.Sound("sounds/Effects/MachineGun.wav")
         self.move_effect = mixer.Sound("sounds/Effects/TankMoving.wav")
         self.laser_effect = mixer.Sound("sounds/Effects/LaserGun.wav")
+        self.laser_charge_effect = mixer.Sound("sounds/Button/LaserChargeEffect.wav")
         self.explode_effect = mixer.Sound("sounds/Effects/GiantExplosion.wav")
         self.button_change = mixer.Sound("sounds/Button/button02.wav")
         self.button_access = mixer.Sound("sounds/Button/button05.wav")
+
 
         #   Channels
         self.channel1 = mixer.Channel(1)
@@ -41,10 +43,12 @@ class Sounds:
         self.channel7.play(self.gatling_effect)
 
     def chargeSound(self):
-        pass
+        self.gatling_effect.set_volume(0.2)
+        self.channel1.play(self.laser_charge_effect)
 
     def shootLaser(self):
-        pass
+        self.gatling_effect.set_volume(0.2)
+        self.channel2.play(self.laser_effect)
 
     def explodeSound(self):
         pass

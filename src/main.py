@@ -270,9 +270,10 @@ class Tank_Destroyer:
                 self.setting.boss_laser_chargetime = 50
                 self.setting.boss_laser_time = 0
 
+            # Add spawn before boss suffix
             if self.setting.boss_laser_time == 0:
-                x_l = self.boss.rect.x + (56 / 128) * self.boss.rect.width
-                y_l = self.boss.rect.y + self.boss.rect.centery
+                x_l = self.spawn.boss.rect.x + (56 / 128) * self.spawn.boss.rect.width
+                y_l = self.spawn.boss.rect.y + self.spawn.boss.rect.centery
                 w_l = 16
                 h_l = 50
 

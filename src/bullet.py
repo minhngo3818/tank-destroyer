@@ -131,19 +131,19 @@ class Laser(Sprite):
 
         if self.direction == "up":
             angle = 0
-            self.rect.y -= 20
+            self.y -= 20
         elif self.direction == "down":
             angle = 180
-            self.rect.y += 20
+            self.y += 20
         elif self.direction == "left":
             angle = 90
-            self.rect.x -= 20
+            self.x -= 20
         elif self.direction == "right":
             angle = 270
-            self.rect.x += 20
+            self.x += 20
 
-        if (self.rect.x <= 0 or self.rect.x >= self.setting.scr_width
-                or self.rect.y <= 0 or self.rect.y >= self.setting.scr_height):
+        if (self.x <= 0 or self.x >= self.setting.scr_width
+                or self.y <= 0 or self.y >= self.setting.scr_height):
             self.kill()
 
         rotated_list = self.rotate_laser(self.x, self.y, angle)

@@ -85,6 +85,11 @@ class BossBullet(Sprite):
         win.blit(rotate_image, (self.rect.x, self.rect.y))
 
 
+def render_laser(win, rotated_list):
+    for rotated_laser in rotated_list:
+        win.blit(rotated_laser[0], (rotated_laser[1].x, rotated_laser[1].y))
+
+
 class Laser(Sprite):
     def __init__(self, x, y, w, h, direction):
         super().__init__()
@@ -117,8 +122,13 @@ class Laser(Sprite):
             rotated_rect = rotated_image.get_rect(center=laser.image.get_rect(center=(x, y)).center)
             rotated_list.append((rotated_image, rotated_rect))
 
+        return rotated_list
+
     def update(self, win):
+        self.create_laser()
+
         angle = 0
+
         if self.direction == "up":
             angle = 0
             self.rect.y -= 20
@@ -136,10 +146,11 @@ class Laser(Sprite):
                 or self.rect.y <= 0 or self.rect.y >= self.setting.scr_height):
             self.kill()
 
-        rotate_image = pygame.transform.rotate(self.image, angle)
-        rotate_rect = rotate_image.get_rect(center=self.image.get_rect(center=(self.rect.x, self.rect.y)).center)
+        rotated_list = self.rotate_laser(self.x, self.y, angle)
 
-        win.blit(rotate_image, (rotate_rect.x, rotate_rect.y))
+        for rotated_laser in rotated_list:
+            win.blit(rotated_laser[0], (rotated_laser[1].x, rotated_laser[1].y))
+
 
 class Particles(Sprite):
     def __init__(self, x, y, target_x, target_y, color, direction):

@@ -192,6 +192,8 @@ class Boss(Sprite):
             self.move_time += 1
 
     def move_update(self):                                          # ISSUE: Double Code Lines compare to enemy class
+
+        # NOTICE: Needs precise indication to shoot player
         dx = self.player.rect.centerx - self.rect.centerx
         dy = self.player.rect.centery - self.rect.centery
 

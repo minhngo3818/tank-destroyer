@@ -23,8 +23,7 @@ class Sounds:
         self.button_change = mixer.Sound("sounds/Button/button02.wav")
         self.button_access = mixer.Sound("sounds/Button/button05.wav")
 
-
-        #   Channels
+        #   Channels - This is just a test on using sound channels
         self.channel1 = mixer.Channel(1)
         self.channel2 = mixer.Channel(2)
         self.channel3 = mixer.Channel(3)

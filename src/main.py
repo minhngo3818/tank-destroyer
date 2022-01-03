@@ -62,9 +62,11 @@ class TankDestroyer:
         collision_tolerance = 10  # The area triggers collisions
         self.collision_player_enemy(collision_tolerance)
         self.collision_enemy_enemy(collision_tolerance)
-        self.collision_boss_player(collision_tolerance)
-        self.collision_boss_enemy(collision_tolerance)
         self.collision_projectiles()
+
+        if self.setting.boss_spawn:
+            self.collision_boss_player(collision_tolerance)
+            self.collision_boss_enemy(collision_tolerance)
 
     # Collision helper functions:
     def collision_two_single_obj(self, obj1, obj2, collision_tolerance):
@@ -181,20 +183,38 @@ class TankDestroyer:
                 self.bullet_group_E.remove(bullet)
                 self.player.hp -= 1
 
+        for bullet in self.bullet_group_B:
+            if pygame.sprite.collide_rect(bullet, self.player):
+                self.bullet_group_B.remove(bullet)
+                self.player.hp -= 20
+
+        for laser in self.laser_group_B:
+            if pygame.sprite.collide_rect(laser, self.player):
+                self.bullet_group_B.remove(laser)
+                self.player.hp -= 5
+
+        for bullet in self.gatling_group_B:
+            if pygame.sprite.collide_rect(bullet, self.player):
+                self.bullet_group_B.remove(bullet)
+                self.player.hp -= 2
+
     def boss_get_hit(self, boss):
         for bullet in self.bullet_group_P:
             if pygame.sprite.collide_rect(boss, bullet):
                 self.bullet_group_P.remove(bullet)
-                self.spawn.boss.hp -= 1
+                self.spawn.boss.hp -= 50
 
-                if self.spawn.boss.hp == 0:
+                if self.spawn.boss.hp <= 0:
+                    self.setting.boss_spawn = False
                     self.spawn.boss.kill()
 
     def collision_projectiles(self):
         self.enemy_get_hit()
         self.player_get_hit()
-        self.boss_get_hit(self.spawn.boss)
         self.check_player_stats()
+
+        if self.setting.boss_spawn:
+            self.boss_get_hit(self.spawn.boss)
 
     """SPAWNING PROJECTILES SECTION"""
 
@@ -219,6 +239,9 @@ class TankDestroyer:
             elif 100 <= self.spawn.boss.stop_time <= 180:
                 if self.spawn.boss.stop_time % 5 == 0:
                     self.create_boss_gatl(self.spawn.boss)
+
+            if self.spawn.boss.hp <= self.setting.boss_health*0.4:
+                self.create_boss_laser(self.spawn.boss)
 
     def create_boss_gatl(self, boss):
         x1_g, x2_g, y1_g, y2_g = 0, 0, 0, 0
@@ -430,6 +453,7 @@ class TankDestroyer:
         self.bullet_group_B.update(self.screen)
         self.gatling_group_B.update(self.screen)
         self.laser_charge_group.update(self.screen)
+        self.laser_group_B.update(self.screen)
         self.player.update(self.screen)
         self.spawn.update_spawn()
         self.check_collision()

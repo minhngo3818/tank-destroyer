@@ -8,7 +8,7 @@ class Settings:
         self.frame_rate = 0.3
 
         #   Player
-        self.player_health = 2
+        self.player_health = 50
         self.player_speed = 2
         self.player_life = 2
         self.collision_damage = 0.001
@@ -53,6 +53,12 @@ class Settings:
         self.bullet_speed = 10
         self.bullet_allowed = 5
 
+        # Damage Type
+        self.bullet_normal = 5
+        self.laser = 5
+        self.bullet_giant = 20
+        self.bullet_gatling = 2
+
         #   Colors
         self.blue = (0, 128, 255)
         self.blue_steel = (80, 130, 180)
@@ -71,7 +77,6 @@ class Settings:
         self.menu_on = True
         self.pause_on = False
         self.gameover_on = False
-
         self.boss_spawn = False
 
         #   Menus Option Amounts

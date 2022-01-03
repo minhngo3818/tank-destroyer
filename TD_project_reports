@@ -301,3 +301,20 @@ Needs:
 - Create minh branch
 - Restructure cooldown implementation for charge effect
 
+>>>>> Day 22: 1/1/2022
+Commit Time: 1h30
+Report:
+- Update collision for player, boss, bullet, laser
+- Update sounds
+- Error when remove a boss obj is destroy: boss_health
+- Laser does not display
+
+Needs:
+- Fix the error when a boss obj is destroyed
+- Fix bug for displaying laser and laser charge
+- A magenta circle is created on screen without movement
+
+>>>>> Day 23: 1/2/2022
+Report:
+- Fix an error of health bar when width < 0
+- Fix bug that not remove boss when hp <= 0

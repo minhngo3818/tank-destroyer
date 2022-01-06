@@ -33,11 +33,11 @@ class HealthBar:
         outer_hp.fill(self.setting.gray)
         rect_outer = outer_hp.get_rect(midleft=((self.setting.scr_width - self.width_boss_start) // 2,
                                                 self.setting.scr_height - 40))
-
-        inner_hp = pygame.Surface((width_decrease, 30))
-        inner_hp.fill(self.setting.red)
-        rect_inner = inner_hp.get_rect(midleft=((self.setting.scr_width - self.width_boss_start) // 2 + 5,
-                                                self.setting.scr_height - 40))
-
         win.blit(outer_hp, rect_outer)
-        win.blit(inner_hp, rect_inner)
+
+        if width_decrease >= 0:
+            inner_hp = pygame.Surface((width_decrease, 30))
+            inner_hp.fill(self.setting.red)
+            rect_inner = inner_hp.get_rect(midleft=((self.setting.scr_width - self.width_boss_start) // 2 + 5,
+                                                    self.setting.scr_height - 40))
+            win.blit(inner_hp, rect_inner)

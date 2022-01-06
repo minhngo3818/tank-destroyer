@@ -12,7 +12,7 @@ class Spawn(Sprite):
         self.setting = access.setting
         self.player = access.player
         self.enemy_group = pygame.sprite.Group()
-        self.boss = Boss(self)
+        self.boss = None
         self.limit = self.setting.enemy_limit
 
     def update_spawn(self):
@@ -20,6 +20,7 @@ class Spawn(Sprite):
             if len(self.enemy_group) < self.limit:
                 if self.setting.level == 1 and not self.setting.boss_spawn:
                     self.setting.boss_spawn = True
+                    self.boss = Boss(self)
                 else:
                     new_enemy = Enemy(self)
                     self.enemy_group.add(new_enemy)

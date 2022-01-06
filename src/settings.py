@@ -32,8 +32,8 @@ class Settings:
         self.boss_cannon_speed = 10
         self.boss_cannon_damage = 20
         self.boss_charge_particle_speed = 2
-        self.boss_charge_density = 10
-        self.boss_cooldown = 200
+        self.boss_charge_density = 20
+        self.boss_laser_cooldown = 200
         self.boss_laser_time = 80
         self.boss_laser_chargetime = 50
         self.boss_stoptime = 200

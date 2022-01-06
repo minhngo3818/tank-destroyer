@@ -112,8 +112,8 @@ class Laser(Sprite):
 
     def create_laser(self):
         self.laser_list.append(self.LaserLayer((204, 0, 0), self.width, self.height))     # Outer
-        self.laser_list.append(self.LaserLayer((255, 51, 51), self.width, self.height))     # Mid
-        self.laser_list.append(self.LaserLayer((255, 204, 204), self.width, self.height))     # Inner
+        self.laser_list.append(self.LaserLayer((255, 51, 51), self.width - 10, self.height))     # Mid
+        self.laser_list.append(self.LaserLayer((255, 204, 204), self.width - 20, self.height))     # Inner
 
     def rotate_laser(self, x, y, angle):
         rotated_list = []
@@ -155,7 +155,7 @@ class Laser(Sprite):
 class Particles(Sprite):
     def __init__(self, x, y, target_x, target_y, color, direction):
         Sprite.__init__(self)
-        self.radius = 10
+        self.radius = 5
         self.surface = pygame.Surface((self.radius * 2, self.radius * 2))
         self.rect = self.surface.get_rect()
         self.rect.x = x
@@ -239,34 +239,34 @@ class Particles(Sprite):
         self.draw_circle(win)
 
 
-def spawn_particles(charge_group, density, player):
+def spawn_particles(charge_group, density, boss):
     pos_x = 0
     pos_y = 0
     pos_gather_x = 0
     pos_gather_y = 0
 
-    if player.direction == "up":
-        pos_x = random.randrange(player.rect.x - 50, player.rect.x + 100)
-        pos_y = random.randrange(player.rect.y - 50, player.rect.y - 10)
-        (pos_gather_x, pos_gather_y) = player.rect.midtop
+    if boss.direction == "up":
+        pos_x = random.randrange(boss.rect.x - 40, boss.rect.x + 168)
+        pos_y = random.randrange(boss.rect.y - 40, boss.rect.y)
+        (pos_gather_x, pos_gather_y) = boss.rect.midtop
 
-    elif player.direction == "down":
-        pos_x = random.randrange(player.rect.x - 50, player.rect.x + 100)
-        pos_y = random.randrange(player.rect.y + 50, player.rect.y + 100)
-        (pos_gather_x, pos_gather_y) = player.rect.midbottom
+    elif boss.direction == "down":
+        pos_x = random.randrange(boss.rect.x - 40, boss.rect.x + 168)
+        pos_y = random.randrange(boss.rect.y + 128, boss.rect.y + 168)
+        (pos_gather_x, pos_gather_y) = boss.rect.midbottom
 
-    elif player.direction == "left":
-        pos_x = random.randrange(player.rect.x - 50, player.rect.x - 10)
-        pos_y = random.randrange(player.rect.y - 50, player.rect.y + 100)
-        (pos_gather_x, pos_gather_y) = player.rect.midleft
+    elif boss.direction == "left":
+        pos_x = random.randrange(boss.rect.x - 40, boss.rect.x)
+        pos_y = random.randrange(boss.rect.y, boss.rect.y + 168)
+        (pos_gather_x, pos_gather_y) = boss.rect.midleft
 
-    elif player.direction == "right":
-        pos_x = random.randrange(player.rect.x + 50, player.rect.x + 100)
-        pos_y = random.randrange(player.rect.y - 50, player.rect.y + 100)
-        (pos_gather_x, pos_gather_y) = player.rect.midright
+    elif boss.direction == "right":
+        pos_x = random.randrange(boss.rect.x + 128, boss.rect.x + 168)
+        pos_y = random.randrange(boss.rect.y, boss.rect.y + 168)
+        (pos_gather_x, pos_gather_y) = boss.rect.midright
 
     for i in range(density):
-        charge_group.add(Particles(pos_x, pos_y, pos_gather_x, pos_gather_y, (255, 0, 255), player.direction))
+        charge_group.add(Particles(pos_x, pos_y, pos_gather_x, pos_gather_y, (255, 255, 255), boss.direction))
 
 
 def remove_particles(charge_group, boss):

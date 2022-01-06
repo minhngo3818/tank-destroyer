@@ -189,7 +189,7 @@ class TankDestroyer:
                 self.player.hp -= self.setting.bullet_giant
 
         for laser in self.laser_group_B:
-            if pygame.sprite.collide_rect(laser, self.player):
+            if pygame.sprite.collide_rect(laser.laser_list[0], self.player):
                 self.bullet_group_B.remove(laser)
                 self.player.hp -= self.setting.bullet_laser
 
@@ -217,7 +217,6 @@ class TankDestroyer:
             self.boss_get_hit(self.spawn.boss)
 
     """SPAWNING PROJECTILES SECTION"""
-
     #   Create Creep Bullets
     def create_bullet(self):
         #   Create Bullet for enemies
@@ -232,7 +231,8 @@ class TankDestroyer:
 
     # Create Boss Projectiles
     def create_boss_projectile(self):
-        if self.setting.boss_spawn and self.spawn.boss.rect.y >= 0:
+        if self.setting.boss_spawn and self.spawn.boss.rect.y >= 0 and \
+                self.spawn.boss.stop_time > 0:
             if self.spawn.boss.stop_time == 50:
                 self.create_boss_gbullet(self.spawn.boss)
 
@@ -240,7 +240,7 @@ class TankDestroyer:
                 if self.spawn.boss.stop_time % 5 == 0:
                     self.create_boss_gatl(self.spawn.boss)
 
-            if self.spawn.boss.hp <= self.setting.boss_health*0.4:
+            elif self.spawn.boss.hp < self.setting.boss_health*0.5:
                 self.create_boss_laser(self.spawn.boss)
 
     def create_boss_gatl(self, boss):
@@ -279,34 +279,30 @@ class TankDestroyer:
 
     def create_boss_laser(self, boss):
         #    Condition for limit bullet
-        if self.setting.boss_cooldown == 0:
-            if self.setting.boss_laser_chargetime == 50:
-                #   Add Laser Charge Effect
+        if self.setting.boss_laser_cooldown <= 0:
+            if self.setting.boss_laser_chargetime > 0:
                 spawn_particles(self.laser_charge_group,
                                 self.setting.boss_charge_density,
-                                self.player)
+                                self.spawn.boss)
                 self.sounds.chargeSound()
                 self.setting.boss_laser_chargetime -= 1
-            elif self.setting.boss_laser_chargetime == 0:
+
+            else:
                 self.laser_charge_group.empty()
-
-                if len(self.bullet_group_B) <= 5:
-                    x_b = boss.rect.x + (56 / 128) * boss.rect.width
-                    y_b = boss.rect.y + (56 / 128) * boss.rect.height
-                    self.laser_group_B.add(Laser(x_b, y_b, 10, 50, boss.direction))
+                if self.setting.boss_laser_time > 0:
+                    x_b = boss.rect.x + 0.5 * boss.rect.width
+                    y_b = boss.rect.y + 0.5 * boss.rect.height
+                    self.laser_group_B.add(Laser(x_b, y_b, 30, 70, boss.direction))
                     self.sounds.shootLaser()
-
-                self.setting.boss_laser_chargetime = 50
-                self.setting.boss_laser_time = 0
-
-            # Add spawn before boss suffix
-            if self.setting.boss_laser_time == 0:
-                self.laser_group_B.empty()
-                self.setting.boss_laser_time += 1
-            elif self.setting.boss_laser_time == 80:
-                self.setting.boss_cooldown = 200
+                    self.setting.boss_laser_time -= 1
+                else:
+                    self.laser_group_B.empty()
+                    # add reset time
+                    self.setting.boss_laser_chargetime = 50
+                    self.setting.boss_laser_time = 80
+                    self.setting.boss_laser_cooldown = 200
         else:
-            self.setting.boss_cooldown -= 1
+            self.setting.boss_laser_cooldown -= 1
 
     """KEY SECTIONS"""
 
@@ -453,6 +449,7 @@ class TankDestroyer:
         self.bullet_group_B.update(self.screen)
         self.gatling_group_B.update(self.screen)
         self.laser_charge_group.update(self.screen)
+        remove_particles(self.laser_charge_group, self.spawn.boss)
         self.laser_group_B.update(self.screen)
         self.player.update(self.screen)
         self.spawn.update_spawn()

@@ -326,3 +326,16 @@ Needs:
 - Fix AI can track player precise player direction and face to it
 
 >>>>> Day 24 1/5/2022
+Commit Time: 3h
+Report:
+- Fix laser not display,
+- Fix charge particles not display
+- Fix random ValueError
+- Align laser to center
+
+Needs:
+- Fix bug that shooting different firearm will stop firing the current firearm
+- Align laser to the gun mouth position
+- Fix error that timer for laser and charge effect
+    (May add random firearm selection)
+

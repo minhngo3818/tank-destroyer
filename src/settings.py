@@ -34,10 +34,11 @@ class Settings:
         self.boss_charge_particle_speed = 2
         self.boss_charge_density = 20
         self.boss_laser_cooldown = 200
-        self.boss_laser_time = 80
-        self.boss_laser_chargetime = 50
-        self.boss_stoptime = 200
-        self.boss_movetime = 50
+        self.boss_laser_time = 150
+        self.boss_laser_chargetime = 80
+        self.boss_gun_select = 0
+        self.boss_stoptime = 300
+        self.boss_movetime = 80
         self.boss_starttime = 0
 
         #   Scoreboard

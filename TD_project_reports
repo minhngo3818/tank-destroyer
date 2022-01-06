@@ -339,3 +339,13 @@ Needs:
 - Fix error that timer for laser and charge effect
     (May add random firearm selection)
 
+>>>>> Day 25: 1/6/2022
+Commit Time:
+Report:
+- increased boss stop and move time
+- fixed timer for guns and gun selection - tested
+- bugs: laser charge sometime does not appear before firing laser,
+    sometimes laser only display when there is stop time and keep appear
+    in the following stop time
+
+

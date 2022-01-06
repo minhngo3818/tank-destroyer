@@ -231,17 +231,27 @@ class TankDestroyer:
 
     # Create Boss Projectiles
     def create_boss_projectile(self):
-        if self.setting.boss_spawn and self.spawn.boss.rect.y >= 0 and \
-                self.spawn.boss.stop_time > 0:
-            if self.spawn.boss.stop_time == 50:
-                self.create_boss_gbullet(self.spawn.boss)
+        # Select a gun before stop time count down
+        if self.setting.boss_spawn:
+            if self.spawn.boss.move_time == self.setting.boss_movetime:
+                self.setting.boss_gun_select = random.randrange(1, 4)
+            # selections: 1 - gbullet, 2 - gatling gun, 3 - laser
 
-            elif 100 <= self.spawn.boss.stop_time <= 180:
-                if self.spawn.boss.stop_time % 5 == 0:
+            if self.setting.boss_spawn and self.spawn.boss.rect.y >= 0 and \
+                    self.spawn.boss.stop_time > 0:
+
+                if self.setting.boss_gun_select == 1 and \
+                        self.spawn.boss.stop_time == self.setting.boss_stoptime // 2:
+                    self.create_boss_gbullet(self.spawn.boss)
+
+                elif self.setting.boss_gun_select == 2 and \
+                        100 <= self.spawn.boss.stop_time <= 180 and \
+                        self.spawn.boss.stop_time % 5 == 0:
                     self.create_boss_gatl(self.spawn.boss)
 
-            elif self.spawn.boss.hp < self.setting.boss_health*0.5:
-                self.create_boss_laser(self.spawn.boss)
+                elif self.setting.boss_gun_select == 3 and \
+                        self.spawn.boss.hp < self.setting.boss_health*0.5:
+                    self.create_boss_laser(self.spawn.boss)
 
     def create_boss_gatl(self, boss):
         x1_g, x2_g, y1_g, y2_g = 0, 0, 0, 0
@@ -279,7 +289,7 @@ class TankDestroyer:
 
     def create_boss_laser(self, boss):
         #    Condition for limit bullet
-        if self.setting.boss_laser_cooldown <= 0:
+        if self.setting.boss_laser_cooldown <= 0 and self.spawn.boss.stop_time > 250:
             if self.setting.boss_laser_chargetime > 0:
                 spawn_particles(self.laser_charge_group,
                                 self.setting.boss_charge_density,
@@ -290,11 +300,26 @@ class TankDestroyer:
             else:
                 self.laser_charge_group.empty()
                 if self.setting.boss_laser_time > 0:
-                    x_b = boss.rect.x + 0.5 * boss.rect.width
-                    y_b = boss.rect.y + 0.5 * boss.rect.height
-                    self.laser_group_B.add(Laser(x_b, y_b, 30, 70, boss.direction))
+                    x_boss, y_boss = 0, 0
+
+                    # Indicate mid-edge positions
+                    if self.spawn.boss.direction == 'up':
+                        x_boss = self.spawn.boss.rect.midtop[0]
+                        y_boss = self.spawn.boss.rect.midtop[1] - 5
+                    elif self.spawn.boss.direction == 'down':
+                        x_boss = self.spawn.boss.rect.midbottom[0]
+                        y_boss = self.spawn.boss.rect.midbottom[1] + 5
+                    elif self.spawn.boss.direction == 'left':
+                        x_boss = self.spawn.boss.rect.midleft[0] - 5
+                        y_boss = self.spawn.boss.rect.midleft[1]
+                    elif self.spawn.boss.direction == 'right':
+                        x_boss = self.spawn.boss.rect.midright[0] + 5
+                        y_boss = self.spawn.boss.rect.midright[1]
+
+                    self.laser_group_B.add(Laser(x_boss, y_boss, 30, 70, boss.direction))
                     self.sounds.shootLaser()
                     self.setting.boss_laser_time -= 1
+
                 else:
                     self.laser_group_B.empty()
                     # add reset time

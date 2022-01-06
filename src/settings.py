@@ -29,10 +29,8 @@ class Settings:
         self.boss_laser_speed = 50
         self.boss_gatling_speed = 50
         self.boss_gatling_allow = 6
-        self.boss_gatling_damage = 2
         self.boss_cannon_speed = 10
         self.boss_cannon_damage = 20
-        self.boss_laser_damage = 1
         self.boss_charge_particle_speed = 2
         self.boss_charge_density = 10
         self.boss_cooldown = 200
@@ -54,8 +52,8 @@ class Settings:
         self.bullet_allowed = 5
 
         # Damage Type
+        self.bullet_laser = 2
         self.bullet_normal = 5
-        self.laser = 5
         self.bullet_giant = 20
         self.bullet_gatling = 2
 

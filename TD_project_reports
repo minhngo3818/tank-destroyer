@@ -318,3 +318,11 @@ Needs:
 Report:
 - Fix an error of health bar when width < 0
 - Fix bug that not remove boss when hp <= 0
+
+Needs:
+- Fix those errors
+- Fix error that laser non-display charge effect and laser
+- No laser collision
+- Fix AI can track player precise player direction and face to it
+
+>>>>> Day 24 1/5/2022

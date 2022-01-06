@@ -181,28 +181,28 @@ class TankDestroyer:
         for bullet in self.bullet_group_E:
             if pygame.sprite.collide_rect(bullet, self.player):
                 self.bullet_group_E.remove(bullet)
-                self.player.hp -= 1
+                self.player.hp -= self.setting.bullet_normal
 
         for bullet in self.bullet_group_B:
             if pygame.sprite.collide_rect(bullet, self.player):
                 self.bullet_group_B.remove(bullet)
-                self.player.hp -= 20
+                self.player.hp -= self.setting.bullet_giant
 
         for laser in self.laser_group_B:
             if pygame.sprite.collide_rect(laser, self.player):
                 self.bullet_group_B.remove(laser)
-                self.player.hp -= 5
+                self.player.hp -= self.setting.bullet_laser
 
         for bullet in self.gatling_group_B:
             if pygame.sprite.collide_rect(bullet, self.player):
                 self.bullet_group_B.remove(bullet)
-                self.player.hp -= 2
+                self.player.hp -= self.setting.bullet_gatling
 
     def boss_get_hit(self, boss):
         for bullet in self.bullet_group_P:
             if pygame.sprite.collide_rect(boss, bullet):
                 self.bullet_group_P.remove(bullet)
-                self.spawn.boss.hp -= 50
+                self.spawn.boss.hp -= (self.setting.bullet_normal * 10)
 
                 if self.spawn.boss.hp <= 0:
                     self.setting.boss_spawn = False

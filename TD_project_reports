@@ -353,4 +353,13 @@ Report:
 Needs:
 - Create a prototype of three layers laser object and test collision
 
+>>>>> Day 26: 1/8/2022
+Commit Time: 2h30
+Report:
+- add laser layers feature that display 3 color
+- add class LaserLayer to display 3 colors
+- add non-member function update_laser() to update entire laserlayer object
+- fix bug that laser is not destroyed when exceed screen boundary
+- fix bug that laser cannot maintain shape when rotated
+
 

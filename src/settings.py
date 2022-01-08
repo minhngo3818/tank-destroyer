@@ -33,6 +33,8 @@ class Settings:
         self.boss_cannon_damage = 20
         self.boss_charge_particle_speed = 2
         self.boss_charge_density = 40
+        self.boss_laser_width = 30
+        self.boss_laser_height = 30
         self.boss_laser_cooldown = 200
         self.boss_laser_time = 400
         self.boss_laser_chargetime = 200
@@ -53,7 +55,7 @@ class Settings:
         self.bullet_allowed = 5
 
         # Damage Type
-        self.bullet_laser = 2
+        self.bullet_laser = 0.1
         self.bullet_normal = 5
         self.bullet_giant = 20
         self.bullet_gatling = 1

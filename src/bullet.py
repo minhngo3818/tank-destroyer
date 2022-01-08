@@ -50,7 +50,8 @@ class BossBullet(Sprite):
         self.setting = Settings()
 
         self.keysources = {"giant": [pygame.image.load("images/Boss_Mega_Bullet.png"), self.setting.boss_cannon_speed],
-                           "gatling": [pygame.image.load("images/boss_gatl_bullet.png"), self.setting.boss_gatling_speed]}
+                           "gatling": [pygame.image.load("images/boss_gatl_bullet.png"),
+                                       self.setting.boss_gatling_speed]}
 
         self.bullet_type = bullet_type
         self.image = self.keysources[self.bullet_type][0]
@@ -85,58 +86,70 @@ class BossBullet(Sprite):
         win.blit(rotate_image, (self.rect.x, self.rect.y))
 
 
-def render_laser(win, rotated_list):
-    for rotated_laser in rotated_list:
-        win.blit(rotated_laser[0], (rotated_laser[1].x, rotated_laser[1].y))
-
-
-# create two class: 1 laser, and group of laser
 class Laser(Sprite):
-    def __init__(self, x, y, w, h, direction):
-        super().__init__()
+    def __init__(self, x, y, width, height, direction):
+        Sprite.__init__(self)
         self.setting = Settings()
-        self.width = w
-        self.height = h
-        self.x = x
-        self.y = y
+        self.image = pygame.Surface((width, height))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
         self.direction = direction
         self.angle = 0
-        self.image_outer = pygame.Surface((self.width, self.height))
-        self.image_outer.fill((204, 0, 0))
-        #self.image_mid = pygame.Surface((self.width - 10, self.height))
-        #self.image_mid.fill((255, 51, 51))
-        #self.image_inner = pygame.Surface((self.width - 20, self.height))
-        #self.image_inner.fill((255, 204, 204))
-        self.rect = self.image_outer.get_rect()
 
-    def update(self, win):
-        angle = 0
+    def move(self):
 
         if self.direction == "up":
-            angle = 0
-            self.y -= 20
+            self.angle = 0
+            self.rect.y -= 10
         elif self.direction == "down":
-            angle = 180
-            self.y += 20
+            self.angle = 180
+            self.rect.y += 10
         elif self.direction == "left":
-            angle = 90
-            self.x -= 20
+            self.angle = 90
+            self.rect.x -= 10
         elif self.direction == "right":
-            angle = 270
-            self.x += 20
+            self.angle = 270
+            self.rect.x += 10
 
-        rotated_image_outer = pygame.transform.rotate(self.image_outer, angle)
-        #rotated_image_mid = pygame.transform.rotate(self.image_mid, angle)
-        #rotated_image_inner = pygame. transform.rotate(self.image_inner, angle)
-        rotated_rect = rotated_image_outer.get_rect(center=self.image_outer.get_rect(center=(self.x, self.y)).center)
+    def update(self, win):
+        self.move()
+        rotated_image = pygame.transform.rotate(self.image, self.angle)
+        rotated_rect = rotated_image.get_rect(center=self.image.get_rect(center=(self.rect.x, self.rect.y)).center)
+        win.blit(rotated_image, (rotated_rect.x, rotated_rect.y))
 
-        if self.rect.x < 0 or self.rect.x > self.setting.scr_width or \
-                self.rect.y < 0 or self.rect.y > self.setting.scr_height:
-            self.kill()
 
-        win.blit(rotated_image_outer, (rotated_rect[0], rotated_rect[1]))
-        #win.blit(rotated_image_mid, (rotated_rect[0] - 10, rotated_rect[1]))
-        #win.blit(rotated_image_inner, (rotated_rect[0] - 20, rotated_rect[1]))
+class LaserLayers:
+    def __init__(self, x, y, width, height, direction):
+        self.color_list = [(255, 0, 127), (255, 102, 178), (255, 204, 229)]
+        self.laser_list = pygame.sprite.Group()
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.direction = direction
+
+    def add_laser_layers(self):
+        laser1 = Laser(self.x, self.y, self.width, self.height, self.direction)
+        laser1.image.fill(self.color_list[0])
+        laser2 = Laser(self.x, self.y, self.width - 10, self.height, self.direction)
+        laser2.image.fill(self.color_list[1])
+        laser3 = Laser(self.x, self.y, self.width - 15, self.height, self.direction)
+        laser3.image.fill(self.color_list[2])
+        self.laser_list.add(laser1)
+        self.laser_list.add(laser2)
+        self.laser_list.add(laser3)
+
+    def update_laser_list(self, win):
+        self.add_laser_layers()
+        for laser in self.laser_list:
+            laser.update(win)
+
+
+# Update laser_layers
+def update_laser(laser_group, win):
+    for laser_object in laser_group:
+        laser_object.update_laser_list(win)
 
 
 class Particles(Sprite):
@@ -265,66 +278,3 @@ def remove_particles(charge_group, boss):
                 (boss.direction == 'right' and c.rect.x <= boss.rect.midright[0])
         )):
             charge_group.remove(c)
-
-
-""" Apply Metaclass to create multi layers object
-
-class Laser(Sprite):
-    def __init__(self, x, y, w, h, direction):
-        super().__init__()
-        self.setting = Settings()
-        self.width = w
-        self.height = h
-        self.x = x
-        self.y = y
-        self.direction = direction
-        self.angle = 0
-        self.laser_list = []
-
-    # Add multiple layer object
-    class LaserLayer(Sprite):
-        def __init__(self, color, width, height):
-            super().__init__()
-            self.image = pygame.Surface((width, height))
-            self.image.fill(color)
-            self.rect = self.image.get_rect()
-
-    def create_laser(self):
-        self.laser_list.append(self.LaserLayer((204, 0, 0), self.width, self.height))     # Outer
-        self.laser_list.append(self.LaserLayer((255, 51, 51), self.width - 10, self.height))     # Mid
-        self.laser_list.append(self.LaserLayer((255, 204, 204), self.width - 20, self.height))     # Inner
-
-    def rotate_laser(self, x, y, angle):
-        rotated_list = []
-        for laser in self.laser_list:
-            rotated_image = pygame.transform.rotate(laser.image, angle)
-            rotated_rect = rotated_image.get_rect(center=laser.image.get_rect(center=(x, y)).center)
-            rotated_list.append((rotated_image, rotated_rect))
-
-        return rotated_list
-
-    def update(self, win):
-        self.create_laser()
-
-        angle = 0
-
-        if self.direction == "up":
-            angle = 0
-            self.y -= 20
-        elif self.direction == "down":
-            angle = 180
-            self.y += 20
-        elif self.direction == "left":
-            angle = 90
-            self.x -= 20
-        elif self.direction == "right":
-            angle = 270
-            self.x += 20
-
-        if (self.x <= 0 or self.x >= self.setting.scr_width
-                or self.y <= 0 or self.y >= self.setting.scr_height):
-            self.kill()
-
-        rotated_list = self.rotate_laser(self.x, self.y, angle)
-        for rotated_laser in rotated_list:
-            win.blit(rotated_laser[0], (rotated_laser[1].x, rotated_laser[1].y))"""

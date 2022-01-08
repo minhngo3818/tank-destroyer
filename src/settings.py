@@ -32,13 +32,13 @@ class Settings:
         self.boss_cannon_speed = 10
         self.boss_cannon_damage = 20
         self.boss_charge_particle_speed = 2
-        self.boss_charge_density = 20
+        self.boss_charge_density = 40
         self.boss_laser_cooldown = 200
-        self.boss_laser_time = 150
-        self.boss_laser_chargetime = 80
+        self.boss_laser_time = 400
+        self.boss_laser_chargetime = 200
         self.boss_gun_select = 0
-        self.boss_stoptime = 300
-        self.boss_movetime = 80
+        self.boss_stoptime = 400
+        self.boss_movetime = 200
         self.boss_starttime = 0
 
         #   Scoreboard
@@ -56,7 +56,7 @@ class Settings:
         self.bullet_laser = 2
         self.bullet_normal = 5
         self.bullet_giant = 20
-        self.bullet_gatling = 2
+        self.bullet_gatling = 1
 
         #   Colors
         self.blue = (0, 128, 255)

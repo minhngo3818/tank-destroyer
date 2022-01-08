@@ -340,12 +340,26 @@ Needs:
     (May add random firearm selection)
 
 >>>>> Day 25: 1/6/2022
-Commit Time:
+Commit Time: 3
 Report:
 - increased boss stop and move time
 - fixed timer for guns and gun selection - tested
 - bugs: laser charge sometime does not appear before firing laser,
     sometimes laser only display when there is stop time and keep appear
     in the following stop time
+- Laser is failed to collide with player object
+- Meta class seems not to work with collide_rect, suspect metaclass is not an object but a type
+
+Needs:
+- Create a prototype of three layers laser object and test collision
+
+>>>>> Day 26: 1/8/2022
+Commit Time: 2h30
+Report:
+- add laser layers feature that display 3 color
+- add class LaserLayer to display 3 colors
+- add non-member function update_laser() to update entire laserlayer object
+- fix bug that laser is not destroyed when exceed screen boundary
+- fix bug that laser cannot maintain shape when rotated
 
 

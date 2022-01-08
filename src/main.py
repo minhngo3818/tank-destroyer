@@ -12,16 +12,17 @@ from sounds import Sounds
 
 
 class TankDestroyer:
-
     """INITIALIZATION"""
+
     def __init__(self):
         pygame.init()
 
         #   Initialize Foundation
         self.setting = Settings()
-        self.bg = pygame.image.load("images/tank_field.png")
         self.width = self.setting.scr_width
         self.height = self.setting.scr_height
+
+        self.bg = pygame.image.load("images/tank_field.png")
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption("Tank Destroyer")
@@ -31,12 +32,12 @@ class TankDestroyer:
         self.FPS = self.setting.FPS
 
         #   Projectile Groups
-        self.bullet_group_P = pygame.sprite.Group()      # Player bullet group
-        self.bullet_group_E = pygame.sprite.Group()      # Enemy bullet group
-        self.bullet_group_B = pygame.sprite.Group()      # Boss canon bullet
-        self.laser_group_B = pygame.sprite.Group()       # Boss laser bullet
+        self.bullet_group_P = pygame.sprite.Group()  # Player bullet group
+        self.bullet_group_E = pygame.sprite.Group()  # Enemy bullet group
+        self.bullet_group_B = pygame.sprite.Group()  # Boss canon bullet
+        self.laser_group_B = []  # Boss laser bullet
         self.laser_charge_group = pygame.sprite.Group()  # Boss laser charge effect
-        self.gatling_group_B = pygame.sprite.Group()     # Boss machine gun bullet
+        self.gatling_group_B = pygame.sprite.Group()  # Boss machine gun bullet
 
         #   Initialize Classes
         self.player = Player(self)
@@ -178,25 +179,41 @@ class TankDestroyer:
                     self.stats.points()
 
     def player_get_hit(self):
+        # Check collision with normal bullet
         for bullet in self.bullet_group_E:
             if pygame.sprite.collide_rect(bullet, self.player):
                 self.bullet_group_E.remove(bullet)
                 self.player.hp -= self.setting.bullet_normal
 
+        # Check collision with big bullet from boss
         for bullet in self.bullet_group_B:
             if pygame.sprite.collide_rect(bullet, self.player):
                 self.bullet_group_B.remove(bullet)
                 self.player.hp -= self.setting.bullet_giant
 
-        for laser in self.laser_group_B:
-            if pygame.sprite.collide_rect(laser.laser_list[0], self.player):
-                self.bullet_group_B.remove(laser)
-                self.player.hp -= self.setting.bullet_laser
+        # Check collision with gatling guns bullets from boss
+        gatling_hit = pygame.sprite.spritecollideany(self.player, self.gatling_group_B)
+        if gatling_hit is not None:
+            self.gatling_group_B.remove(gatling_hit)
+            self.player.hp -= self.setting.bullet_gatling
 
-        for bullet in self.gatling_group_B:
-            if pygame.sprite.collide_rect(bullet, self.player):
-                self.bullet_group_B.remove(bullet)
-                self.player.hp -= self.setting.bullet_gatling
+        # Check collision with laser from boss
+        if len(self.laser_group_B) != 0:
+            for laser in self.laser_group_B:
+                if len(laser.laser_list) != 0:
+                    laser_hit = pygame.sprite.spritecollideany(self.player, laser.laser_list)
+                    if laser_hit is not None:
+                        self.laser_group_B.remove(laser)
+                        self.player.hp -= self.setting.bullet_laser
+
+                    count_collide_screen = 0
+                    for layer in laser.laser_list:
+                        if layer.rect.x <= 0 or layer.rect.x >= self.width or \
+                                layer.rect.y <= 0 or layer.rect.y >= self.height:
+                            laser.laser_list.remove(layer)
+                            count_collide_screen += 1
+                    if count_collide_screen == 3:
+                        self.laser_group_B.remove(laser)
 
     def boss_get_hit(self, boss):
         for bullet in self.bullet_group_P:
@@ -217,6 +234,7 @@ class TankDestroyer:
             self.boss_get_hit(self.spawn.boss)
 
     """SPAWNING PROJECTILES SECTION"""
+
     #   Create Creep Bullets
     def create_bullet(self):
         #   Create Bullet for enemies
@@ -233,25 +251,36 @@ class TankDestroyer:
     def create_boss_projectile(self):
         # Select a gun before stop time count down
         if self.setting.boss_spawn:
+            upper_bound = 3
+            if self.spawn.boss.hp <= self.setting.boss_health * 0.5:
+                upper_bound = 4
+
             if self.spawn.boss.move_time == self.setting.boss_movetime:
-                self.setting.boss_gun_select = random.randrange(1, 4)
+                self.setting.boss_gun_select = 3  # random.randrange(1, upper_bound)
             # selections: 1 - gbullet, 2 - gatling gun, 3 - laser
 
             if self.setting.boss_spawn and self.spawn.boss.rect.y >= 0 and \
                     self.spawn.boss.stop_time > 0:
 
                 if self.setting.boss_gun_select == 1 and \
-                        self.spawn.boss.stop_time == self.setting.boss_stoptime // 2:
+                        self.spawn.boss.stop_time % 200 == 0:
                     self.create_boss_gbullet(self.spawn.boss)
 
                 elif self.setting.boss_gun_select == 2 and \
-                        100 <= self.spawn.boss.stop_time <= 180 and \
+                        50 <= self.spawn.boss.stop_time <= 300 and \
                         self.spawn.boss.stop_time % 5 == 0:
                     self.create_boss_gatl(self.spawn.boss)
 
-                elif self.setting.boss_gun_select == 3 and \
-                        self.spawn.boss.hp < self.setting.boss_health*0.5:
+                elif self.setting.boss_gun_select == 3:
                     self.create_boss_laser(self.spawn.boss)
+
+    def create_boss_gbullet(self, boss):
+        #   Condition for limit bullet
+        if len(self.bullet_group_B) <= 5:
+            x_b = boss.rect.x + (56 / 128) * boss.rect.width
+            y_b = boss.rect.y + (56 / 128) * boss.rect.height
+            self.bullet_group_B.add(BossBullet(x_b, y_b, "giant", boss.direction))
+            self.sounds.shootPlayer()
 
     def create_boss_gatl(self, boss):
         x1_g, x2_g, y1_g, y2_g = 0, 0, 0, 0
@@ -275,25 +304,17 @@ class TankDestroyer:
             self.gatling_group_B.add(bullet_left)
             self.gatling_group_B.add(bullet_right)
             self.sounds.machineGun()
-        else:
-            for bullet in self.gatling_group_B:
-                self.gatling_group_B.remove(bullet)
-
-    def create_boss_gbullet(self, boss):
-        #   Condition for limit bullet
-        if len(self.bullet_group_B) <= 5:
-            x_b = boss.rect.x + (56 / 128) * boss.rect.width
-            y_b = boss.rect.y + (56 / 128) * boss.rect.height
-            self.bullet_group_B.add(BossBullet(x_b, y_b, "giant", boss.direction))
-            self.sounds.shootPlayer()
 
     def create_boss_laser(self, boss):
         #    Condition for limit bullet
-        if self.setting.boss_laser_cooldown <= 0 and self.spawn.boss.stop_time > 250:
+        if self.setting.boss_laser_cooldown <= 0 and boss.stop_time > 250:
+            # Keep reset stop time while firing laser
+            boss.stop_time = self.setting.boss_stoptime
+
             if self.setting.boss_laser_chargetime > 0:
                 spawn_particles(self.laser_charge_group,
                                 self.setting.boss_charge_density,
-                                self.spawn.boss)
+                                boss)
                 self.sounds.chargeSound()
                 self.setting.boss_laser_chargetime -= 1
 
@@ -303,25 +324,28 @@ class TankDestroyer:
                     x_boss, y_boss = 0, 0
 
                     # Indicate mid-edge positions
-                    if self.spawn.boss.direction == 'up':
-                        x_boss = self.spawn.boss.rect.midtop[0]
-                        y_boss = self.spawn.boss.rect.midtop[1] - 5
-                    elif self.spawn.boss.direction == 'down':
-                        x_boss = self.spawn.boss.rect.midbottom[0]
-                        y_boss = self.spawn.boss.rect.midbottom[1] + 5
-                    elif self.spawn.boss.direction == 'left':
-                        x_boss = self.spawn.boss.rect.midleft[0] - 5
-                        y_boss = self.spawn.boss.rect.midleft[1]
-                    elif self.spawn.boss.direction == 'right':
-                        x_boss = self.spawn.boss.rect.midright[0] + 5
-                        y_boss = self.spawn.boss.rect.midright[1]
+                    if boss.direction == 'up':
+                        x_boss = boss.rect.midtop[0]
+                        y_boss = boss.rect.midtop[1]
+                    elif boss.direction == 'down':
+                        x_boss = boss.rect.midbottom[0]
+                        y_boss = boss.rect.midbottom[1] - 5
+                    elif boss.direction == 'left':
+                        x_boss = boss.rect.midleft[0]
+                        y_boss = boss.rect.midleft[1] - 10
+                    elif boss.direction == 'right':
+                        x_boss = boss.rect.midright[0]
+                        y_boss = boss.rect.midright[1] - 10
 
-                    self.laser_group_B.add(Laser(x_boss, y_boss, 30, 70, boss.direction))
+                    self.laser_group_B.append(LaserLayers(x_boss, y_boss,
+                                                          self.setting.boss_laser_width,
+                                                          self.setting.boss_laser_height,
+                                                          boss.direction))
                     self.sounds.shootLaser()
                     self.setting.boss_laser_time -= 1
 
                 else:
-                    self.laser_group_B.empty()
+                    self.laser_group_B.clear()
                     # add reset time
                     self.setting.boss_laser_chargetime = 50
                     self.setting.boss_laser_time = 80
@@ -475,7 +499,7 @@ class TankDestroyer:
         self.gatling_group_B.update(self.screen)
         self.laser_charge_group.update(self.screen)
         remove_particles(self.laser_charge_group, self.spawn.boss)
-        self.laser_group_B.update(self.screen)
+        update_laser(self.laser_group_B, self.screen)
         self.player.update(self.screen)
         self.spawn.update_spawn()
         self.check_collision()

@@ -25,8 +25,7 @@ class Players(Sprite):
 class Enemy(Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((40, 40))
-        self.image.fill((255, 0, 255))
+        self.image = pygame.image.load("images/Boss_Move_1.png").convert()
         self.rect = self.image.get_rect(center=(800 // 4, 560 // 2))
 
 

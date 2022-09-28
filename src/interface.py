@@ -69,7 +69,7 @@ class Interface:
 
     def update_life(self, lives):
         for life_number in range(lives):
-            life = pygame.image.load('images/tank_up(1).png').convert_alpha()
+            life = pygame.image.load('../images/tank_up(1).png').convert_alpha()
             size = life.get_size()
             image_smaller = pygame.transform.smoothscale(life, (int(size[0] * 0.5), int(size[1] * 0.5)))
             rect = image_smaller.get_rect()

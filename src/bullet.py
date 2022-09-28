@@ -12,10 +12,10 @@ class Bullet(Sprite):
     def __init__(self, b_x, b_y, direction):
         super().__init__()
         self.setting = Settings()
-        self.bullet_images = {"left": pygame.image.load("images/bullet_left.png"),
-                              "right": pygame.image.load("images/bullet_right.png"),
-                              "up": pygame.image.load("images/bullet_up.png"),
-                              "down": pygame.image.load("images/bullet_down.png")}
+        self.bullet_images = {"left": pygame.image.load("../images/bullet_left.png"),
+                              "right": pygame.image.load("../images/bullet_right.png"),
+                              "up": pygame.image.load("../images/bullet_up.png"),
+                              "down": pygame.image.load("../images/bullet_down.png")}
         self.direction = direction
         self.image = self.bullet_images[self.direction].convert()
         self.rect = self.image.get_rect()
@@ -49,8 +49,8 @@ class BossBullet(Sprite):
 
         self.setting = Settings()
 
-        self.keysources = {"giant": [pygame.image.load("images/Boss_Mega_Bullet.png"), self.setting.boss_cannon_speed],
-                           "gatling": [pygame.image.load("images/boss_gatl_bullet.png"),
+        self.keysources = {"giant": [pygame.image.load("../images/Boss_Mega_Bullet.png"), self.setting.boss_cannon_speed],
+                           "gatling": [pygame.image.load("../images/boss_gatl_bullet.png"),
                                        self.setting.boss_gatling_speed]}
 
         self.bullet_type = bullet_type

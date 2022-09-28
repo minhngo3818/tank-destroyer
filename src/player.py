@@ -14,22 +14,22 @@ class Player(Sprite):
         self.gameover_on = self.setting.gameover_on
         self.sounds = Sounds(self)
 
-        self.player_images = {"left": [pygame.image.load("images/tank_left(1).png"),
-                                       pygame.image.load("images/tank_left(2).png"),
-                                       pygame.image.load("images/tank_left(3).png"),
-                                       pygame.image.load("images/tank_left(4).png")],
-                              "right": [pygame.image.load("images/tank_right(1).png"),
-                                        pygame.image.load("images/tank_right(2).png"),
-                                        pygame.image.load("images/tank_right(3).png"),
-                                        pygame.image.load("images/tank_right(4).png")],
-                              "up": [pygame.image.load("images/tank_up(1).png"),
-                                     pygame.image.load("images/tank_up(2).png"),
-                                     pygame.image.load("images/tank_up(3).png"),
-                                     pygame.image.load("images/tank_up(4).png")],
-                              "down": [pygame.image.load("images/tank_down(1).png"),
-                                       pygame.image.load("images/tank_down(2).png"),
-                                       pygame.image.load("images/tank_down(3).png"),
-                                       pygame.image.load("images/tank_down(4).png")]}
+        self.player_images = {"left": [pygame.image.load("../images/tank_left(1).png"),
+                                       pygame.image.load("../images/tank_left(2).png"),
+                                       pygame.image.load("../images/tank_left(3).png"),
+                                       pygame.image.load("../images/tank_left(4).png")],
+                              "right": [pygame.image.load("../images/tank_right(1).png"),
+                                        pygame.image.load("../images/tank_right(2).png"),
+                                        pygame.image.load("../images/tank_right(3).png"),
+                                        pygame.image.load("../images/tank_right(4).png")],
+                              "up": [pygame.image.load("../images/tank_up(1).png"),
+                                     pygame.image.load("../images/tank_up(2).png"),
+                                     pygame.image.load("../images/tank_up(3).png"),
+                                     pygame.image.load("../images/tank_up(4).png")],
+                              "down": [pygame.image.load("../images/tank_down(1).png"),
+                                       pygame.image.load("../images/tank_down(2).png"),
+                                       pygame.image.load("../images/tank_down(3).png"),
+                                       pygame.image.load("../images/tank_down(4).png")]}
         self.direction = "up"
         self.index = 0
         self.image = self.player_images[self.direction][self.index].convert()

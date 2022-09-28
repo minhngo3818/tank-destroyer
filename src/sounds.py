@@ -12,16 +12,16 @@ class Sounds:
         self.access = access
         self.setting = access.setting
 
-        self.gametrack = mixer.Sound("sounds/Theme/BattleInTheWinter.wav")
+        self.gametrack = mixer.Sound("../sounds/Theme/BattleInTheWinter.wav")
 
-        self.shoot_effect = mixer.Sound("sounds/Effects/CanonDistanceFire-01.wav")
-        self.gatling_effect = mixer.Sound("sounds/Effects/MachineGun.wav")
-        self.move_effect = mixer.Sound("sounds/Effects/TankMoving.wav")
-        self.laser_effect = mixer.Sound("sounds/Effects/LaserGun.wav")
-        self.laser_charge_effect = mixer.Sound("sounds/Effects/LaserChargeEffect.wav")
-        self.explode_effect = mixer.Sound("sounds/Effects/GiantExplosion.wav")
-        self.button_change = mixer.Sound("sounds/Button/button02.wav")
-        self.button_access = mixer.Sound("sounds/Button/button05.wav")
+        self.shoot_effect = mixer.Sound("../sounds/Effects/CanonDistanceFire-01.wav")
+        self.gatling_effect = mixer.Sound("../sounds/Effects/MachineGun.wav")
+        self.move_effect = mixer.Sound("../sounds/Effects/TankMoving.wav")
+        self.laser_effect = mixer.Sound("../sounds/Effects/LaserGun.wav")
+        self.laser_charge_effect = mixer.Sound("../sounds/Effects/LaserChargeEffect.wav")
+        self.explode_effect = mixer.Sound("../sounds/Effects/GiantExplosion.wav")
+        self.button_change = mixer.Sound("../sounds/Button/button02.wav")
+        self.button_access = mixer.Sound("../sounds/Button/button05.wav")
 
         #   Channels - This is just a test on using sound channels
         self.channel1 = mixer.Channel(1)

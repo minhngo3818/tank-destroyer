@@ -22,7 +22,7 @@ class TankDestroyer:
         self.width = self.setting.scr_width
         self.height = self.setting.scr_height
 
-        self.bg = pygame.image.load("images/tank_field.png")
+        self.bg = pygame.image.load("../images/tank_field.png")
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption("Tank Destroyer")
